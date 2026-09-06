@@ -352,34 +352,109 @@ body::before {
 ================================= */
 
 .demon-card {
-
-    width: 100%;
-
-    position: relative;
-
-    scroll-margin-top: 30px;
-
-    border-radius: 10px;
-
-    overflow: hidden;
-
     background: #020602;
-
-    box-shadow:
-        0 12px 30px rgba(0, 0, 0, 0.75),
-        0 0 20px rgba(0, 255, 40, 0.06);
-
-    transition:
-        transform 0.25s ease,
-        box-shadow 0.25s ease;
 }
 
+.top-number {
+    width: 120px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: linear-gradient(
+        135deg,
+        #00c800,
+        #009000
+    );
+
+    color: white;
+
+    font-family: Pusab, Arial Black, sans-serif;
+    font-size: 16px;
+
+    border-radius: 10px 10px 0 0;
+
+    position: relative;
+    z-index: 2;
+}
+
+/* =================================
+   DEMON NAME
+================================= */
+
+.demon-name {
+    position: relative;
+
+    padding: 13px 18px 13px 20px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #020602 0%,
+            #030903 70%,
+            #020602 100%
+        );
+
+    color: #ffffff;
+
+    font-family: Pusab, Arial Black, sans-serif;
+    font-size: 20px;
+
+    text-align: left;
+
+    letter-spacing: 0.5px;
+
+    text-shadow:
+        2px 2px 4px rgba(0, 0, 0, 0.9);
+
+    border-bottom: 1px solid rgba(0, 255, 50, 0.12);
+
+    box-shadow:
+        inset 0 -1px 0 rgba(0, 255, 50, 0.05);
+}
+
+
+/* ZIELONY AKCENT PO LEWEJ */
+
+.demon-name::before {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    top: 0;
+    bottom: 0;
+
+    width: 4px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #00e000,
+            #008000
+        );
+
+    box-shadow:
+        0 0 10px rgba(0, 255, 50, 0.25);
+}
+
+
+/* DELIKATNY HOVER */
+
+.demon-card:hover .demon-name {
+    color: #b8ffb8;
+
+    text-shadow:
+        0 0 8px rgba(0, 255, 50, 0.2),
+        2px 2px 4px black;
+}
 
 /* HOVER KARTY */
 
 .demon-card:hover {
 
-    transform: translateY(-3px);
+    transform: translateY(-10px);
 
     box-shadow:
         0 15px 35px rgba(0, 0, 0, 0.8),
@@ -482,7 +557,7 @@ body::before {
 
     font-size: 22px;
 
-    letter-spacing: 2px;
+    letter-spacing: 5px;
 }
 
 
@@ -637,4 +712,235 @@ body::before {
         2px 2px 4px black;
 
     z-index: 5;
+}
+
+/* =================================
+   SEARCH PANEL
+================================= */
+
+.search-panel {
+    width: min(900px, 92%);
+    margin: 0 auto 38px;
+
+    position: relative;
+    z-index: 20;
+
+    padding: 18px;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(0, 100, 0, 0.96),
+            rgba(0, 35, 0, 0.96)
+        );
+
+    border: 1px solid rgba(0, 255, 50, 0.3);
+    border-radius: 12px;
+
+    box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.65),
+        0 0 25px rgba(0, 255, 40, 0.1);
+}
+
+
+/* TYTUŁ */
+
+.search-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    margin-bottom: 12px;
+
+    font-family: Pusab, Arial Black, sans-serif;
+    font-size: 17px;
+
+    color: white;
+
+    text-shadow:
+        2px 2px 4px black;
+}
+
+
+/* INPUT */
+
+.search-input-wrapper {
+    display: flex;
+    align-items: center;
+
+    width: 100%;
+
+    background: #001500;
+
+    border: 1px solid rgba(0, 255, 50, 0.3);
+    border-radius: 8px;
+
+    overflow: hidden;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.search-input-wrapper:focus-within {
+    border-color: #00e000;
+
+    box-shadow:
+        0 0 12px rgba(0, 255, 40, 0.2);
+}
+
+
+#global-search {
+    flex: 1;
+
+    width: 100%;
+
+    padding: 14px 16px;
+
+    border: none;
+    outline: none;
+
+    background: transparent;
+
+    color: white;
+
+    font-family: Arial, sans-serif;
+    font-size: 15px;
+}
+
+#global-search::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+
+/* X */
+
+#clear-search {
+    width: 45px;
+    height: 45px;
+
+    border: none;
+    background: transparent;
+
+    color: rgba(255, 255, 255, 0.4);
+
+    font-size: 24px;
+
+    cursor: pointer;
+
+    transition:
+        color 0.2s ease,
+        transform 0.2s ease;
+}
+
+#clear-search:hover {
+    color: white;
+    transform: scale(1.1);
+}
+
+
+/* =================================
+   SEARCH RESULTS
+================================= */
+
+#search-results {
+    display: none;
+
+    margin-top: 10px;
+
+    max-height: 300px;
+
+    overflow-y: auto;
+
+    border-radius: 8px;
+}
+
+
+/* POJEDYNCZY WYNIK */
+
+.search-result {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    width: 100%;
+
+    padding: 12px 15px;
+
+    margin-bottom: 4px;
+
+    border: 1px solid rgba(0, 255, 50, 0.08);
+    border-radius: 7px;
+
+    background:
+        rgba(0, 45, 0, 0.85);
+
+    color: #b8ffb8;
+
+    cursor: pointer;
+
+    text-align: left;
+
+    font-family: Pusab, Arial Black, sans-serif;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.search-result:hover {
+    background:
+        linear-gradient(
+            90deg,
+            rgba(0, 190, 0, 0.35),
+            rgba(0, 100, 0, 0.2)
+        );
+
+    color: white;
+
+    transform: translateX(4px);
+}
+
+
+.search-result-main {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+}
+
+.search-result-type {
+    padding: 4px 7px;
+
+    border-radius: 5px;
+
+    background: #009900;
+
+    color: white;
+
+    font-size: 9px;
+}
+
+.search-result-points {
+    color: #7cff7c;
+
+    font-size: 11px;
+}
+
+
+/* BRAK WYNIKÓW */
+
+.search-no-results {
+    padding: 18px;
+
+    text-align: center;
+
+    color: rgba(255, 255, 255, 0.45);
+
+    font-family: Pusab, Arial Black, sans-serif;
+    font-size: 13px;
 }
