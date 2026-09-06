@@ -1,0 +1,56 @@
+#hejder{
+    color:black;
+    width:80%;
+    height:10vh;
+    background-color:#00aa00;
+    justify-content:center;
+    display:flex;
+    align-items:center;
+    font-size:30px;
+    font-family:Pusab;
+    border-radius:10px;
+    box-shadow: 5px 5px 10px black;
+    gap: 25px;
+}
+body{
+    position:relative;
+    display:flex;
+    justify-content:center;
+    background-color:#004400;
+}
+#R1:hover{
+    color:white;
+    transition:0.5s;
+}
+#R1:not(:hover){
+    color:black;
+    transition:0.5s;
+    text-shadow: 5px 5px 10px black;
+}
+#R2:hover{
+    color:white;
+    transition:0.5s;
+}
+#R2:not(:hover){
+    color:black;
+    transition:0.5s;
+    text-shadow: 5px 5px 10px black;
+}
+#R3:hover{
+    color:white;
+    transition:0.5s;
+}
+#R3:not(:hover){
+    color:black;
+    transition:0.5s;
+    text-shadow: 5px 5px 10px black;
+}
+#R4:hover{
+    color:white;
+    transition:0.5s;
+}
+#R4:not(:hover){
+    color:black;
+    transition:0.5s;
+    text-shadow: 5px 5px 10px black;
+}
