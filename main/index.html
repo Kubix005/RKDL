@@ -13,4 +13,19 @@
         <p id="R3">Demon</p> 
         <p id="R4">List</p></header>
 </body>
+<script>
+    fetch("../images/text.txt")
+        .then(response => response.text())
+        .then(text => {
+            const links = text.trim().split("\n");
+
+            const container = document.getElementById("images");
+
+            links.forEach(link => {
+                const img = document.createElement("img");
+                img.src = link.trim();
+                container.appendChild(img);
+            });
+        });
+</script>
 </html>
