@@ -315,12 +315,12 @@ body::before {
 
 #ranking::-webkit-scrollbar-track {
 
-    background: #001a00;
+    background: #000;
 }
 
 #ranking::-webkit-scrollbar-thumb {
 
-    background: #00a800;
+    background: #55aa55;
 
     border-radius: 10px;
 }
