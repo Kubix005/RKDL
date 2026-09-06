@@ -1,98 +1,640 @@
-#hejder{
-    color:black;
-    width:80%;
-    height:10vh;
-    background-color:#00aa00;
-    justify-content:center;
-    display:flex;
-    align-items:center;
-    font-size:30px;
-    font-family:Pusab;
-    border-radius:10px;
-    box-shadow: 5px 5px 10px black;
-    gap: 25px;
-}
-html,body{min-height: 100%;}
-body {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background: linear-gradient(to bottom, #006600, #000);
-    min-height: 100vh;
-    gap:10px;
-    top:10px;
-}
-#R1:hover{
-    color:white;
-    transition:0.5s;
-}
-#R1:not(:hover){
-    color:black;
-    transition:0.5s;
-    text-shadow: 5px 5px 10px black;
-}
-#R2:hover{
-    color:white;
-    transition:0.5s;
-}
-#R2:not(:hover){
-    color:black;
-    transition:0.5s;
-    text-shadow: 5px 5px 10px black;
-}
-#R3:hover{
-    color:white;
-    transition:0.5s;
-}
-#R3:not(:hover){
-    color:black;
-    transition:0.5s;
-    text-shadow: 5px 5px 10px black;
-}
-#R4:hover{
-    color:white;
-    transition:0.5s;
-}
-#R4:not(:hover){
-    color:black;
-    transition:0.5s;
-    text-shadow: 5px 5px 10px black;
-}
-#top1{
-    scale:70%;
-    border-radius:10px;
-}
-#top1t{
-    font-family: Pusab;
-    color:white;
-    font-size:20px;
-    background-color:#00aa00;
-    width:8%;
-    height:5vh;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    border-radius:10px 10px 0 0;
-}
-#top2{
-    scale:70%;
-    border-radius:10px;
-}
-#top2t{
-    font-family: Pusab;
-    color:white;
-    font-size:20px;
-    background-color:#00aa00;
-    width:8%;
-    height:5vh;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    border-radius:10px 10px 0 0;
-}
-*{
-margin: 0;
-padding: 0;
+/* =================================
+   RESET
+================================= */
 
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    min-height: 100vh;
+
+    font-family: Arial, sans-serif;
+
+    color: white;
+
+    /* LEPSZE TŁO */
+    background:
+        radial-gradient(
+            circle at 50% -10%,
+            rgba(0, 255, 50, 0.30),
+            transparent 35%
+        ),
+        radial-gradient(
+            circle at 0% 100%,
+            rgba(0, 130, 0, 0.25),
+            transparent 35%
+        ),
+        linear-gradient(
+            135deg,
+            #003d00 0%,
+            #001d00 45%,
+            #000900 100%
+        );
+
+    background-attachment: fixed;
+
+    overflow-x: hidden;
+}
+
+
+/* =================================
+   DELIKATNY WZÓR W TLE
+================================= */
+
+body::before {
+    content: "";
+
+    position: fixed;
+
+    inset: 0;
+
+    pointer-events: none;
+
+    opacity: 0.12;
+
+    background-image:
+        linear-gradient(
+            45deg,
+            transparent 48%,
+            rgba(0, 255, 50, 0.15) 49%,
+            transparent 51%
+        );
+
+    background-size: 80px 80px;
+
+    z-index: -1;
+}
+
+
+/* =================================
+   HEADER
+================================= */
+
+#hejder {
+    width: min(90%, 1400px);
+
+    min-height: 90px;
+
+    margin: 20px auto 40px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #00c800,
+            #009900
+        );
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    gap: 28px;
+
+    border-radius: 12px;
+
+    border: 1px solid rgba(0, 255, 50, 0.35);
+
+    box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.65),
+        0 0 30px rgba(0, 255, 40, 0.12);
+
+    font-size: 30px;
+
+    font-family: Pusab, Arial Black, sans-serif;
+
+    position: relative;
+
+    z-index: 10;
+}
+
+
+/* =================================
+   HEADER NAPISY
+================================= */
+
+#hejder p {
+
+    cursor: pointer;
+
+    color: black;
+
+    text-shadow:
+        4px 4px 8px rgba(0, 0, 0, 0.8);
+
+    transition:
+        color 0.25s ease,
+        transform 0.25s ease,
+        text-shadow 0.25s ease;
+}
+
+
+#hejder p:hover {
+
+    color: white;
+
+    transform: translateY(-3px);
+
+    text-shadow:
+        0 0 10px white,
+        4px 4px 8px black;
+}
+
+
+/* =================================
+   GŁÓWNY UKŁAD
+================================= */
+
+.layout {
+
+    width: min(1400px, 92%);
+
+    margin: 0 auto 80px;
+
+    display: grid;
+
+    grid-template-columns: 190px 1fr;
+
+    gap: 30px;
+
+    align-items: start;
+}
+
+
+/* =================================
+   LEWA LISTA
+================================= */
+
+#ranking {
+
+    position: sticky;
+
+    top: 20px;
+
+    max-height: calc(100vh - 40px);
+
+    overflow-y: auto;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(0, 100, 0, 0.95),
+            rgba(0, 35, 0, 0.95)
+        );
+
+    border-radius: 12px;
+
+    border: 1px solid rgba(0, 255, 50, 0.25);
+
+    box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.65),
+        0 0 20px rgba(0, 255, 40, 0.08);
+
+    overflow-x: hidden;
+}
+
+
+/* =================================
+   TYTUŁ LISTY
+================================= */
+
+.ranking-title {
+
+    position: sticky;
+
+    top: 0;
+
+    z-index: 2;
+
+    padding: 15px 10px;
+
+    text-align: center;
+
+    font-family: Pusab, Arial Black, sans-serif;
+
+    font-size: 16px;
+
+    color: white;
+
+    background:
+        linear-gradient(
+            135deg,
+            #00c800,
+            #009900
+        );
+
+    text-shadow:
+        2px 2px 4px black;
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+
+/* =================================
+   POJEDYNCZY ELEMENT LISTY
+================================= */
+
+.ranking-item {
+
+    display: block;
+
+    width: 100%;
+
+    padding: 11px 15px;
+
+    text-decoration: none;
+
+    color: #b8ffb8;
+
+    font-family: Pusab, Arial Black, sans-serif;
+
+    font-size: 14px;
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        padding-left 0.2s ease;
+}
+
+
+/* HOVER */
+
+.ranking-item:hover {
+
+    color: white;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(0, 220, 0, 0.35),
+            rgba(0, 220, 0, 0.05)
+        );
+
+    padding-left: 22px;
+}
+
+
+/* AKTYWNY */
+
+.ranking-item.active {
+
+    color: white;
+
+    background:
+        linear-gradient(
+            90deg,
+            #00b900,
+            #007800
+        );
+
+    box-shadow:
+        inset 4px 0 0 #7cff7c;
+
+    text-shadow:
+        2px 2px 4px black;
+}
+
+
+/* =================================
+   SCROLLBAR LISTY
+================================= */
+
+#ranking::-webkit-scrollbar {
+
+    width: 7px;
+}
+
+#ranking::-webkit-scrollbar-track {
+
+    background: #001a00;
+}
+
+#ranking::-webkit-scrollbar-thumb {
+
+    background: #00a800;
+
+    border-radius: 10px;
+}
+
+#ranking::-webkit-scrollbar-thumb:hover {
+
+    background: #00e000;
+}
+
+
+/* =================================
+   PRAWA CZĘŚĆ
+================================= */
+
+#demons {
+
+    width: 100%;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 55px;
+}
+
+
+/* =================================
+   KARTA DEMONA
+================================= */
+
+.demon-card {
+
+    width: 100%;
+
+    position: relative;
+
+    scroll-margin-top: 30px;
+
+    border-radius: 10px;
+
+    overflow: hidden;
+
+    background: #020602;
+
+    box-shadow:
+        0 12px 30px rgba(0, 0, 0, 0.75),
+        0 0 20px rgba(0, 255, 40, 0.06);
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+
+/* HOVER KARTY */
+
+.demon-card:hover {
+
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 15px 35px rgba(0, 0, 0, 0.8),
+        0 0 25px rgba(0, 255, 40, 0.12);
+}
+
+
+/* =================================
+   TOP NUMBER
+================================= */
+
+.top-number {
+
+    width: 120px;
+
+    height: 45px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background:
+        linear-gradient(
+            135deg,
+            #00c800,
+            #009000
+        );
+
+    color: white;
+
+    font-family: Pusab, Arial Black, sans-serif;
+
+    font-size: 16px;
+
+    border-radius: 10px 10px 0 0;
+
+    text-shadow:
+        2px 2px 4px black;
+
+    box-shadow:
+        0 3px 8px rgba(0, 0, 0, 0.5);
+
+    position: relative;
+
+    z-index: 2;
+}
+
+
+/* =================================
+   OBRAZEK
+================================= */
+
+.demon-card img {
+
+    display: block;
+
+    width: 100%;
+
+    height: auto;
+
+    max-height: 360px;
+
+    object-fit: cover;
+}
+
+
+/* =================================
+   PUSTE KARTY TOP 3-50
+================================= */
+
+.empty-card {
+
+    min-height: 250px;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(0, 180, 0, 0.15),
+            transparent 60%
+        ),
+        #020702;
+}
+
+
+.placeholder {
+
+    min-height: 205px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    color: rgba(255, 255, 255, 0.25);
+
+    font-family: Pusab, Arial Black, sans-serif;
+
+    font-size: 22px;
+
+    letter-spacing: 2px;
+}
+
+
+/* =================================
+   RESPONSIVE
+================================= */
+
+@media (max-width: 800px) {
+
+    #hejder {
+
+        width: 94%;
+
+        min-height: 70px;
+
+        font-size: 22px;
+
+        gap: 15px;
+
+    }
+
+
+    .layout {
+
+        width: 94%;
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    #ranking {
+
+        position: sticky;
+
+        top: 10px;
+
+        max-height: 190px;
+
+        z-index: 5;
+    }
+
+
+    #ranking-list {
+
+        display: grid;
+
+        grid-template-columns: repeat(5, 1fr);
+    }
+
+
+    .ranking-title {
+
+        padding: 10px;
+    }
+
+
+    .ranking-item {
+
+        text-align: center;
+
+        padding: 9px 3px;
+
+        font-size: 11px;
+    }
+
+
+    .ranking-item:hover {
+
+        padding-left: 3px;
+    }
+
+
+    #demons {
+
+        gap: 35px;
+    }
+
+}
+.ranking-item {
+    display: flex;
+
+    justify-content: space-between;
+    align-items: center;
+
+    width: 100%;
+
+    padding: 11px 15px;
+
+    text-decoration: none;
+
+    color: #b8ffb8;
+
+    font-family: Pusab, Arial Black, sans-serif;
+
+    font-size: 14px;
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        padding-left 0.2s ease;
+}
+
+
+.points {
+    color: #7cff7c;
+
+    font-size: 11px;
+
+    opacity: 0.9;
+
+    text-shadow:
+        1px 1px 3px black;
+}
+
+
+.ranking-item:hover .points {
+    color: white;
+}
+
+
+.ranking-item.active .points {
+    color: white;
+}
+.image-points {
+    position: absolute;
+
+    right: 12px;
+    bottom: 12px;
+
+    padding: 8px 14px;
+
+    background: rgba(0, 120, 0, 0.92);
+
+    color: white;
+
+    font-family: Pusab, Arial Black, sans-serif;
+
+    font-size: 16px;
+
+    border-radius: 8px;
+
+    border: 1px solid rgba(120, 255, 120, 0.5);
+
+    box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.7),
+        0 0 10px rgba(0, 255, 40, 0.2);
+
+    text-shadow:
+        2px 2px 4px black;
+
+    z-index: 5;
 }
