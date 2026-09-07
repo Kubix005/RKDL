@@ -955,3 +955,291 @@ body::before {
     width: 100%;
     height: auto;
 }
+
+/* =========================
+   LEADERBOARD BUTTON
+========================= */
+
+.leaderboard-button {
+
+    display: block;
+
+    width: fit-content;
+
+    margin: 20px auto;
+
+    padding: 14px 28px;
+
+    background: #111;
+
+    color: white;
+
+    text-decoration: none;
+
+    font-weight: bold;
+
+    border: 2px solid #333;
+
+    border-radius: 8px;
+
+    transition: 0.2s;
+
+}
+
+
+.leaderboard-button:hover {
+
+    background: #222;
+
+    transform: translateY(-2px);
+
+}
+
+
+/* =========================
+   LEADERBOARD PAGE
+========================= */
+
+.leaderboard-page {
+
+    width: 90%;
+
+    max-width: 1100px;
+
+    margin: 40px auto;
+
+}
+
+
+.leaderboard-title {
+
+    font-size: 32px;
+
+    font-weight: bold;
+
+    text-align: center;
+
+    margin-bottom: 8px;
+
+}
+
+
+.leaderboard-subtitle {
+
+    text-align: center;
+
+    opacity: 0.6;
+
+    margin-bottom: 30px;
+
+}
+
+
+/* =========================
+   ROW
+========================= */
+
+.leaderboard-row {
+
+    display: grid;
+
+    grid-template-columns:
+        80px
+        1fr
+        300px
+        120px;
+
+    align-items: center;
+
+    gap: 20px;
+
+    padding: 18px 22px;
+
+    margin-bottom: 8px;
+
+    background: #111;
+
+    border: 1px solid #292929;
+
+    border-radius: 8px;
+
+    transition: 0.2s;
+
+}
+
+
+.leaderboard-row:hover {
+
+    background: #181818;
+
+    transform: translateX(3px);
+
+}
+
+
+/* =========================
+   POSITION
+========================= */
+
+.leaderboard-position {
+
+    font-size: 22px;
+
+    font-weight: bold;
+
+    opacity: 0.7;
+
+}
+
+
+/* =========================
+   PLAYER
+========================= */
+
+.leaderboard-player-name {
+
+    font-size: 20px;
+
+    font-weight: bold;
+
+}
+
+
+.leaderboard-player-stats {
+
+    margin-top: 5px;
+
+    font-size: 13px;
+
+    opacity: 0.55;
+
+}
+
+
+/* =========================
+   TOP STATS
+========================= */
+
+.leaderboard-tops {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 4px;
+
+    font-size: 12px;
+
+    opacity: 0.7;
+
+}
+
+
+/* =========================
+   POINTS
+========================= */
+
+.leaderboard-points {
+
+    text-align: right;
+
+    font-size: 22px;
+
+    font-weight: bold;
+
+}
+
+
+.leaderboard-points small {
+
+    font-size: 12px;
+
+    opacity: 0.6;
+
+}
+
+
+/* =========================
+   TOP 3
+========================= */
+
+.leaderboard-first {
+
+    border-width: 2px;
+
+}
+
+
+.leaderboard-second {
+
+    border-width: 2px;
+
+}
+
+
+.leaderboard-third {
+
+    border-width: 2px;
+
+}
+
+
+/* =========================
+   BACK BUTTON
+========================= */
+
+.back-button {
+
+    color: white;
+
+    text-decoration: none;
+
+}
+
+
+/* =========================
+   LOADING / ERROR
+========================= */
+
+.leaderboard-loading,
+.leaderboard-error {
+
+    text-align: center;
+
+    padding: 40px;
+
+    opacity: 0.6;
+
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 800px) {
+
+    .leaderboard-row {
+
+        grid-template-columns:
+            50px
+            1fr
+            90px;
+
+    }
+
+
+    .leaderboard-tops {
+
+        display: none;
+
+    }
+
+
+    .leaderboard-points {
+
+        font-size: 18px;
+
+    }
+
+}

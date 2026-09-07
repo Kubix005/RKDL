@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>RKDL - Leaderboard</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+    <!-- HEADER -->
+
+    <header id="hejder">
+
+        <a href="index.html" class="back-button">
+            ← RKDL
+        </a>
+
+        <p id="R1">Rodzinka</p>
+        <p id="R2">Kicka</p>
+        <p id="R3">Demon</p>
+        <p id="R4">List</p>
+
+    </header>
+
+
+    <!-- LEADERBOARD -->
+
+    <main class="leaderboard-page">
+
+        <div class="leaderboard-title">
+            PLAYER LEADERBOARD
+        </div>
+
+        <div class="leaderboard-subtitle">
+            Ranking based on completed demons
+        </div>
+
+
+        <div id="leaderboard-list">
+
+            <div class="leaderboard-loading">
+                Loading players...
+            </div>
+
+        </div>
+
+    </main>
+
+
+<script>
+
+/* =========================
+   SYSTEM PUNKTÓW
+========================= */
+
+function getPoints(rank) {
+
+    const maxPoints = 1000;
+    const minPoints = 1;
+    const maxRank = 150;
+
+    const multiplier = Math.pow(
+        minPoints / maxPoints,
+        1 / (maxRank - 1)
+    );
+
+    return Math.round(
+        maxPoints * Math.pow(
+            multiplier,
+            rank - 1
+        )
+    );
+
+}
+
+
+/* =========================
+   LOAD PLAYERS
+========================= */
+
+async function loadLeaderboard() {
+
+    const leaderboard =
+        document.getElementById(
+            "leaderboard-list"
+        );
+
+    try {
+
+        const response =
+            await fetch("./players.json", {
+                cache: "no-cache"
+            });
+
+        if (!response.ok) {
+
+            throw new Error(
+                "HTTP " + response.status
+            );
+
+        }
+
+        const players =
+            await response.json();
+
+
+        if (!Array.isArray(players)) {
+
+            throw new Error(
+                "players.json is not an array"
+            );
+
+        }
+
+
+        /* =========================
+           LICZENIE PUNKTÓW
+        ========================= */
+
+        const rankedPlayers =
+            players.map(player => {
+
+                const demons =
+                    Array.isArray(player.Demons)
+                        ? player.Demons
+                        : [];
+
+
+                let totalPoints = 0;
+
+                let bestRank = 999;
+
+                let top10 = 0;
+                let top25 = 0;
+                let top50 = 0;
+
+
+                demons.forEach(demon => {
+
+                    /*
+                       players.json powinien
+                       zawierać np.:
+                       top1
+                       top15
+                       top42
+                    */
+
+                    const match =
+                        String(demon)
+                            .toLowerCase()
+                            .match(/top(\d+)/);
+
+
+                    if (!match) return;
+
+
+                    const rank =
+                        Number(match[1]);
+
+
+                    if (
+                        rank < 1 ||
+                        rank > 150
+                    ) {
+                        return;
+                    }
+
+
+                    totalPoints +=
+                        getPoints(rank);
+
+
+                    if (rank < bestRank) {
+                        bestRank = rank;
+                    }
+
+
+                    if (rank <= 10) {
+                        top10++;
+                    }
+
+
+                    if (rank <= 25) {
+                        top25++;
+                    }
+
+
+                    if (rank <= 50) {
+                        top50++;
+                    }
+
+                });
+
+
+                return {
+
+                    name:
+                        String(
+                            player.Player || "Unknown"
+                        ),
+
+                    demons:
+                        demons.length,
+
+                    points:
+                        totalPoints,
+
+                    bestRank:
+                        bestRank === 999
+                            ? null
+                            : bestRank,
+
+                    top10,
+                    top25,
+                    top50
+
+                };
+
+            });
+
+
+        /* =========================
+           SORTOWANIE
+        ========================= */
+
+        rankedPlayers.sort(
+            (a, b) => {
+
+                /*
+                   Najpierw punkty
+                */
+
+                if (
+                    b.points !== a.points
+                ) {
+
+                    return (
+                        b.points -
+                        a.points
+                    );
+
+                }
+
+
+                /*
+                   Potem liczba demonów
+                */
+
+                return (
+                    b.demons -
+                    a.demons
+                );
+
+            }
+        );
+
+
+        /* =========================
+           USUWAMY LOADING
+        ========================= */
+
+        leaderboard.innerHTML = "";
+
+
+        /* =========================
+           TWORZENIE RANKINGU
+        ========================= */
+
+        rankedPlayers.forEach(
+            (player, index) => {
+
+                const position =
+                    index + 1;
+
+
+                const row =
+                    document.createElement("div");
+
+
+                row.className =
+                    "leaderboard-row";
+
+
+                /*
+                   TOP 3
+                */
+
+                if (position === 1) {
+                    row.classList.add(
+                        "leaderboard-first"
+                    );
+                }
+
+                if (position === 2) {
+                    row.classList.add(
+                        "leaderboard-second"
+                    );
+                }
+
+                if (position === 3) {
+                    row.classList.add(
+                        "leaderboard-third"
+                    );
+                }
+
+
+                row.innerHTML = `
+
+                    <div class="leaderboard-position">
+                        #${position}
+                    </div>
+
+
+                    <div class="leaderboard-player">
+
+                        <div class="leaderboard-player-name">
+                            ${player.name}
+                        </div>
+
+                        <div class="leaderboard-player-stats">
+
+                            ${player.demons} DEMONS
+
+                            ${
+                                player.bestRank
+                                    ? ` • BEST TOP ${player.bestRank}`
+                                    : ""
+                            }
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="leaderboard-tops">
+
+                        <span>
+                            TOP 10:
+                            ${player.top10}
+                        </span>
+
+                        <span>
+                            TOP 25:
+                            ${player.top25}
+                        </span>
+
+                        <span>
+                            TOP 50:
+                            ${player.top50}
+                        </span>
+
+                    </div>
+
+
+                    <div class="leaderboard-points">
+
+                        ${player.points}
+
+                        <small>RK</small>
+
+                    </div>
+
+                `;
+
+
+                leaderboard.appendChild(row);
+
+            }
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Leaderboard error:",
+            error
+        );
+
+
+        leaderboard.innerHTML = `
+
+            <div class="leaderboard-error">
+
+                Failed to load players.json.
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+
+loadLeaderboard();
+
+</script>
+
+</body>
+</html>
