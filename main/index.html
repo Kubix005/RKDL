@@ -819,64 +819,41 @@ async function loadPlayers() {
 
     try {
 
-        const response =
-            await fetch("./players.json", {
-                cache: "no-cache"
-            });
-
+        const response = await fetch("./players.json", {
+            cache: "no-cache"
+        });
 
         if (!response.ok) {
-            throw new Error(
-                "HTTP " + response.status
-            );
+            throw new Error("HTTP " + response.status);
         }
 
-
-        const data =
-            await response.json();
-
-
-        /*
-           Sprawdzamy czy JSON
-           jest tablicą
-        */
+        const data = await response.json();
 
         if (!Array.isArray(data)) {
-
             throw new Error(
                 "players.json nie zawiera tablicy"
             );
-
         }
-
-
-        /*
-           Normalizujemy dane
-        */
 
         players = data.map(player => ({
 
-            Player:
-                String(player.Player || ""),
+            Player: String(
+                player.Player || ""
+            ),
 
-            Demons:
-                Array.isArray(player.Demons)
-                    ? player.Demons
-                    : []
+            Demons: Array.isArray(player.Demons)
+                ? player.Demons.map(demon =>
+                    String(demon)
+                )
+                : []
 
         }));
 
-
-        console.log(
-            "PLAYER DATABASE:",
-            players
-        );
-
+        console.log("PLAYER DATABASE:", players);
         console.log(
             "Liczba graczy:",
             players.length
         );
-
 
     } catch (error) {
 
@@ -889,8 +866,502 @@ async function loadPlayers() {
 
 }
 
-
 loadPlayers();
+
+
+/* =================================
+   ZNAJDŹ DEMONA PO NAZWIE
+================================= */
+
+function findDemonByName(name) {
+
+    const cards =
+        document.querySelectorAll(".demon-card");
+
+    const searchName =
+        name.toLowerCase().trim();
+
+    for (const card of cards) {
+
+        const nameElement =
+            card.querySelector(".demon-name");
+
+        if (!nameElement) continue;
+
+        const demonName =
+            nameElement.textContent
+                .trim()
+                .toLowerCase();
+
+        if (demonName === searchName) {
+
+            return card;
+
+        }
+
+    }
+
+    return null;
+
+}
+
+
+/* =================================
+   ZNAJDŹ DEMONA PO ID TOP
+   np. top1
+================================= */
+
+function findDemonById(id) {
+
+    return document.getElementById(id);
+
+}
+
+
+/* =================================
+   WYSZUKIWANIE
+================================= */
+
+searchInput.addEventListener(
+    "input",
+    function () {
+
+        const query =
+            this.value
+                .toLowerCase()
+                .trim();
+
+        searchResults.innerHTML = "";
+
+        if (!query) {
+
+            searchResults.style.display =
+                "none";
+
+            return;
+
+        }
+
+        let foundSomething = false;
+
+
+        /* =================================
+           GRACZE
+        ================================= */
+
+        players.forEach(player => {
+
+            const playerName =
+                player.Player
+                    .toLowerCase();
+
+            /*
+               Szukamy po nazwie gracza
+            */
+
+            if (playerName.includes(query)) {
+
+                foundSomething = true;
+
+                const result =
+                    document.createElement("div");
+
+                result.className =
+                    "search-result";
+
+                result.innerHTML = `
+
+                    <div class="search-result-main">
+
+                        <span class="search-result-type">
+                            PLAYER
+                        </span>
+
+                        <span>
+                            ${player.Player}
+                        </span>
+
+                    </div>
+
+                    <span class="search-result-points">
+                        ${player.Demons.length} DEMONS
+                    </span>
+
+                `;
+
+                result.addEventListener(
+                    "click",
+                    () => {
+
+                        showPlayer(player);
+
+                    }
+                );
+
+                searchResults.appendChild(result);
+
+            }
+
+
+            /* =================================
+               SZUKANIE PO DEMONACH GRACZA
+            ================================= */
+
+            player.Demons.forEach(demon => {
+
+                const demonName =
+                    demon.toLowerCase();
+
+                if (
+                    demonName.includes(query)
+                ) {
+
+                    foundSomething = true;
+
+                    const result =
+                        document.createElement("div");
+
+                    result.className =
+                        "search-result";
+
+                    result.innerHTML = `
+
+                        <div class="search-result-main">
+
+                            <span class="search-result-type">
+                                DEMON
+                            </span>
+
+                            <span>
+                                ${demon}
+                            </span>
+
+                        </div>
+
+                        <span class="search-result-points">
+                            ${player.Player}
+                        </span>
+
+                    `;
+
+                    result.addEventListener(
+                        "click",
+                        () => {
+
+                            const card =
+                                findDemonByName(demon);
+
+                            if (card) {
+
+                                card.scrollIntoView({
+                                    behavior: "smooth",
+                                    block: "center"
+                                });
+
+                            }
+
+                            searchResults.style.display =
+                                "none";
+
+                        }
+                    );
+
+                    searchResults.appendChild(
+                        result
+                    );
+
+                }
+
+            });
+
+        });
+
+
+        /* =================================
+           DEMONY Z LISTY
+        ================================= */
+
+        const demonCards =
+            document.querySelectorAll(
+                ".demon-card"
+            );
+
+        demonCards.forEach(card => {
+
+            const nameElement =
+                card.querySelector(
+                    ".demon-name"
+                );
+
+            if (!nameElement) return;
+
+            const demonName =
+                nameElement.textContent
+                    .trim();
+
+            const nameLower =
+                demonName.toLowerCase();
+
+            const rank =
+                card.id.replace(
+                    "top",
+                    ""
+                );
+
+            const rankLower =
+                `top ${rank}`;
+
+            const rankWithoutSpace =
+                `top${rank}`;
+
+
+            if (
+
+                nameLower.includes(query) ||
+
+                rankLower.includes(query) ||
+
+                rankWithoutSpace.includes(query) ||
+
+                rank === query
+
+            ) {
+
+                foundSomething = true;
+
+                const result =
+                    document.createElement("div");
+
+                result.className =
+                    "search-result";
+
+                result.innerHTML = `
+
+                    <div class="search-result-main">
+
+                        <span class="search-result-type">
+                            DEMON
+                        </span>
+
+                        <span>
+                            ${demonName}
+                        </span>
+
+                    </div>
+
+                    <span class="search-result-points">
+                        TOP ${rank}
+                    </span>
+
+                `;
+
+                result.addEventListener(
+                    "click",
+                    () => {
+
+                        card.scrollIntoView({
+                            behavior: "smooth",
+                            block: "center"
+                        });
+
+                        searchResults.style.display =
+                            "none";
+
+                    }
+                );
+
+                searchResults.appendChild(
+                    result
+                );
+
+            }
+
+        });
+
+
+        /* =================================
+           BRAK WYNIKÓW
+        ================================= */
+
+        if (!foundSomething) {
+
+            searchResults.innerHTML = `
+
+                <div class="search-no-results">
+                    No players or demons found.
+                </div>
+
+            `;
+
+        }
+
+        searchResults.style.display =
+            "block";
+
+    }
+);
+
+
+/* =================================
+   POKAŻ GRACZA
+================================= */
+
+function showPlayer(player) {
+
+    searchResults.innerHTML = "";
+
+
+    /* =================================
+       NAGŁÓWEK
+    ================================= */
+
+    const header =
+        document.createElement("div");
+
+    header.className =
+        "search-result player-header";
+
+    header.innerHTML = `
+
+        <div class="search-result-main">
+
+            <span class="search-result-type">
+                PLAYER
+            </span>
+
+            <span>
+                ${player.Player}
+            </span>
+
+        </div>
+
+        <span class="search-result-points">
+            ${player.Demons.length} DEMONS
+        </span>
+
+    `;
+
+    searchResults.appendChild(header);
+
+
+    /* =================================
+       DEMONY GRACZA
+    ================================= */
+
+    player.Demons.forEach(demonName => {
+
+        const card =
+            findDemonByName(demonName);
+
+        const result =
+            document.createElement("div");
+
+        result.className =
+            "search-result";
+
+        /*
+           Jeżeli demon istnieje
+           na stronie
+        */
+
+        if (card) {
+
+            const rank =
+                card.id.replace(
+                    "top",
+                    ""
+                );
+
+            result.innerHTML = `
+
+                <div class="search-result-main">
+
+                    <span class="search-result-type">
+                        DEMON
+                    </span>
+
+                    <span>
+                        ${demonName}
+                    </span>
+
+                </div>
+
+                <span class="search-result-points">
+                    TOP ${rank}
+                </span>
+
+            `;
+
+            result.addEventListener(
+                "click",
+                () => {
+
+                    card.scrollIntoView({
+                        behavior: "smooth",
+                        block: "center"
+                    });
+
+                    searchResults.style.display =
+                        "none";
+
+                }
+            );
+
+        } else {
+
+            /*
+               Demon jest w JSON,
+               ale karta jeszcze nie istnieje
+            */
+
+            result.innerHTML = `
+
+                <div class="search-result-main">
+
+                    <span class="search-result-type">
+                        DEMON
+                    </span>
+
+                    <span>
+                        ${demonName}
+                    </span>
+
+                </div>
+
+                <span class="search-result-points">
+                    NOT ON LIST YET
+                </span>
+
+            `;
+
+        }
+
+        searchResults.appendChild(result);
+
+    });
+
+}
+
+
+/* =================================
+   CLEAR
+================================= */
+
+clearSearch.addEventListener(
+    "click",
+    () => {
+
+        searchInput.value = "";
+
+        searchResults.innerHTML = "";
+
+        searchResults.style.display =
+            "none";
+
+        searchInput.focus();
+
+    }
+);
 
 
 /* =================================

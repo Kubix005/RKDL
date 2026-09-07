@@ -1,14 +1,17 @@
 [
-    {
-        "Player": "kubix005",
-        "Demons": ["top1", "top3"]
-    },
-    {
-        "Player": "Player2",
-        "Demons": ["top2", "top5"]
-    },
-    {
-        "Player": "Player3",
-        "Demons": ["top1", "top10", "top20"]
-    }
+  {
+    "Player": "Kuba",
+    "Demons": [
+      "Cobwebs",
+      "Acheron",
+      "Bloodbath"
+    ]
+  },
+  {
+    "Player": "Player2",
+    "Demons": [
+      "Cobwebs",
+      "Bloodlust"
+    ]
+  }
 ]
