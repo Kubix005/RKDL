@@ -944,3 +944,14 @@ body::before {
     font-family: Pusab, Arial Black, sans-serif;
     font-size: 13px;
 }
+
+.demon-image {
+    position: relative;
+    width: 100%;
+}
+
+.demon-image img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
