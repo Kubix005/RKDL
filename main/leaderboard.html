@@ -60,12 +60,11 @@
 
     </main>
 
-
 <script>
 
-/* =====================================================
+/* =========================
    SYSTEM PUNKTÓW
-===================================================== */
+========================= */
 
 function getPoints(rank) {
 
@@ -79,114 +78,93 @@ function getPoints(rank) {
     );
 
     return Math.round(
-        maxPoints *
-        Math.pow(
+        maxPoints * Math.pow(
             multiplier,
             rank - 1
         )
     );
-
 }
 
 
-/* =====================================================
-   BAZA DEMONÓW
-===================================================== */
+/* =========================
+   DEMONY
+========================= */
 
 /*
-   Tutaj wpisujemy nazwę demona + jego TOP.
-
-   Możesz później dodawać kolejne:
-
-   {
-       name: "Nazwa",
-       rank: 3
-   }
+   Na razie wpisujemy tutaj demony,
+   które są już na stronie.
 */
 
-const demons = [
+const demons = {
 
-    {
-        name: "Cobwebs",
-        rank: 1
-    },
+    "cobwebs": 1
 
-    {
-        name: "TOP 2",
-        rank: 2
-    }
+    // Przykład:
+    // "acheron": 2,
+    // "slaughterhouse": 3
 
-];
+};
 
 
-/* =====================================================
-   ZNAJDŹ DEMONA
-===================================================== */
+/* =========================
+   ZNAJDŹ RANK DEMONA
+========================= */
 
-function findDemon(demonInput) {
+function getDemonRank(demon) {
 
-    const input =
-        String(demonInput)
+    const text =
+        String(demon)
             .trim()
             .toLowerCase();
 
 
-    /* -----------------------------------------
-       Sprawdzamy np. "top1", "top 1"
-    ----------------------------------------- */
+    /* =========================
+       np. top1 / top 1
+    ========================= */
 
     const topMatch =
-        input.match(/^top\s*(\d+)$/);
+        text.match(/^top\s*(\d+)$/);
 
 
     if (topMatch) {
 
-        const rank =
-            Number(topMatch[1]);
-
-
-        return {
-            rank: rank,
-            name: `TOP ${rank}`
-        };
+        return Number(
+            topMatch[1]
+        );
 
     }
 
 
-    /* -----------------------------------------
-       Sprawdzamy nazwę demona
-    ----------------------------------------- */
+    /* =========================
+       nazwa demona
+    ========================= */
 
-    const demon =
-        demons.find(demon => {
+    if (
+        demons[text] !== undefined
+    ) {
 
-            return (
-                demon.name
-                    .toLowerCase() === input
-            );
-
-        });
-
-
-    if (demon) {
-
-        return demon;
+        return demons[text];
 
     }
 
 
-    /* -----------------------------------------
+    /*
        Nie znaleziono
-    ----------------------------------------- */
+    */
+
+    console.warn(
+        "Nie znaleziono demona:",
+        demon
+    );
 
     return null;
 
 }
 
 
-/* =====================================================
-   LOAD PLAYERS
-===================================================== */
+/* =========================
+   LOAD LEADERBOARD
+========================= */
 
 async function loadLeaderboard() {
 
@@ -197,10 +175,6 @@ async function loadLeaderboard() {
 
 
     try {
-
-        /* -----------------------------------------
-           Pobieramy players.json
-        ----------------------------------------- */
 
         const response =
             await fetch(
@@ -214,7 +188,8 @@ async function loadLeaderboard() {
         if (!response.ok) {
 
             throw new Error(
-                "HTTP " + response.status
+                "HTTP " +
+                response.status
             );
 
         }
@@ -233,21 +208,17 @@ async function loadLeaderboard() {
         }
 
 
-        console.log(
-            "PLAYERS:",
-            players
-        );
-
-
-        /* =================================================
-           OBLICZAMY STATYSTYKI GRACZY
-        ================================================= */
+        /* =========================
+           OBLICZANIE GRACZY
+        ========================= */
 
         const rankedPlayers =
             players.map(player => {
 
                 const playerDemons =
-                    Array.isArray(player.Demons)
+                    Array.isArray(
+                        player.Demons
+                    )
                         ? player.Demons
                         : [];
 
@@ -265,44 +236,34 @@ async function loadLeaderboard() {
                 let validDemons = 0;
 
 
-                /* -----------------------------------------
-                   KAŻDY DEMON GRACZA
-                ----------------------------------------- */
+                /* =========================
+                   DEMONY GRACZA
+                ========================= */
 
                 playerDemons.forEach(
-                    demonInput => {
+                    demon => {
 
-                        const demon =
-                            findDemon(
-                                demonInput
+                        const rank =
+                            getDemonRank(
+                                demon
                             );
 
 
                         /*
-                           Demon nie istnieje
-                           w naszej bazie
+                           Nie znaleziono
                         */
 
-                        if (!demon) {
-
-                            console.warn(
-                                "Unknown demon:",
-                                demonInput
-                            );
+                        if (
+                            rank === null
+                        ) {
 
                             return;
 
                         }
 
 
-                        const rank =
-                            Number(
-                                demon.rank
-                            );
-
-
                         /*
-                           Bezpieczny zakres
+                           Zły rank
                         */
 
                         if (
@@ -315,61 +276,71 @@ async function loadLeaderboard() {
                         }
 
 
-                        /* ---------------------------------
-                           DODAJEMY PUNKTY
-                        --------------------------------- */
+                        /* =========================
+                           PUNKTY
+                        ========================= */
 
                         const points =
-                            getPoints(rank);
+                            getPoints(
+                                rank
+                            );
 
 
-                        totalPoints += points;
+                        totalPoints +=
+                            points;
 
 
                         validDemons++;
 
 
-                        /* ---------------------------------
-                           BEST RANK
-                        --------------------------------- */
+                        /* =========================
+                           BEST TOP
+                        ========================= */
 
                         if (
                             bestRank === null ||
                             rank < bestRank
                         ) {
 
-                            bestRank = rank;
+                            bestRank =
+                                rank;
 
                         }
 
 
-                        /* ---------------------------------
+                        /* =========================
                            TOP 10
-                        --------------------------------- */
+                        ========================= */
 
-                        if (rank <= 10) {
+                        if (
+                            rank <= 10
+                        ) {
 
                             top10++;
 
                         }
 
 
-                        /* ---------------------------------
+                        /* =========================
                            TOP 25
-                        --------------------------------- */
+                        ========================= */
 
-                        if (rank <= 25) {
+                        if (
+                            rank <= 25
+                        ) {
 
                             top25++;
 
                         }
 
 
-                        /* ---------------------------------
+                        /* =========================
                            TOP 50
-                        --------------------------------- */
+                        ========================= */
 
-                        if (rank <= 50) {
+                        if (
+                            rank <= 50
+                        ) {
 
                             top50++;
 
@@ -378,10 +349,6 @@ async function loadLeaderboard() {
                     }
                 );
 
-
-                /* -----------------------------------------
-                   ZWRACAMY GOTOWE DANE
-                ----------------------------------------- */
 
                 return {
 
@@ -414,15 +381,15 @@ async function loadLeaderboard() {
             });
 
 
-        /* =================================================
+        /* =========================
            SORTOWANIE
-        ================================================= */
+        ========================= */
 
         rankedPlayers.sort(
             (a, b) => {
 
                 /*
-                   1. Najwięcej RK
+                   Najpierw RK
                 */
 
                 if (
@@ -439,8 +406,7 @@ async function loadLeaderboard() {
 
 
                 /*
-                   2. Jeśli tyle samo RK,
-                      więcej demonów
+                   Potem liczba demonów
                 */
 
                 if (
@@ -457,8 +423,7 @@ async function loadLeaderboard() {
 
 
                 /*
-                   3. Jeśli nadal remis,
-                      lepszy BEST TOP
+                   Na końcu najlepszy TOP
                 */
 
                 if (
@@ -487,37 +452,16 @@ async function loadLeaderboard() {
         );
 
 
-        /* =================================================
-           USUWAMY LOADING
-        ================================================= */
+        /* =========================
+           WYCZYŚĆ LOADING
+        ========================= */
 
         leaderboard.innerHTML = "";
 
 
-        /* =================================================
-           BRAK GRACZY
-        ================================================= */
-
-        if (
-            rankedPlayers.length === 0
-        ) {
-
-            leaderboard.innerHTML = `
-
-                <div class="leaderboard-error">
-                    No players found.
-                </div>
-
-            `;
-
-            return;
-
-        }
-
-
-        /* =================================================
-           TWORZYMY WIERSZE
-        ================================================= */
+        /* =========================
+           GENEROWANIE WIERSZY
+        ========================= */
 
         rankedPlayers.forEach(
             (player, index) => {
@@ -536,9 +480,7 @@ async function loadLeaderboard() {
                     "leaderboard-row";
 
 
-                /* -----------------------------------------
-                   TOP 3
-                ----------------------------------------- */
+                /* TOP 3 */
 
                 if (
                     position === 1
@@ -550,8 +492,7 @@ async function loadLeaderboard() {
 
                 }
 
-
-                if (
+                else if (
                     position === 2
                 ) {
 
@@ -561,8 +502,7 @@ async function loadLeaderboard() {
 
                 }
 
-
-                if (
+                else if (
                     position === 3
                 ) {
 
@@ -573,9 +513,7 @@ async function loadLeaderboard() {
                 }
 
 
-                /* -----------------------------------------
-                   BEST TOP
-                ----------------------------------------- */
+                /* BEST TOP */
 
                 const bestText =
                     player.bestRank !== null
@@ -584,10 +522,6 @@ async function loadLeaderboard() {
 
                         : "";
 
-
-                /* -----------------------------------------
-                   HTML
-                ----------------------------------------- */
 
                 row.innerHTML = `
 
@@ -625,12 +559,10 @@ async function loadLeaderboard() {
                             ${player.top10}
                         </span>
 
-
                         <span>
                             TOP 25:
                             ${player.top25}
                         </span>
-
 
                         <span>
                             TOP 50:
@@ -658,8 +590,9 @@ async function loadLeaderboard() {
             }
         );
 
+    }
 
-    } catch (error) {
+    catch (error) {
 
         console.error(
             "Leaderboard error:",
@@ -682,13 +615,12 @@ async function loadLeaderboard() {
 }
 
 
-/* =====================================================
+/* =========================
    START
-===================================================== */
+========================= */
 
 loadLeaderboard();
 
 </script>
-
 </body>
 </html>
