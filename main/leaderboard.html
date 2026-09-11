@@ -59,15 +59,8 @@
         </div>
 
     </main>
-
 <script>
-
-/* =========================
-   SYSTEM PUNKTÓW
-========================= */
-
 function getPoints(rank) {
-
     const maxPoints = 1000;
     const minPoints = 1;
     const maxRank = 150;
@@ -78,549 +71,229 @@ function getPoints(rank) {
     );
 
     return Math.round(
-        maxPoints * Math.pow(
-            multiplier,
-            rank - 1
-        )
+        maxPoints * Math.pow(multiplier, rank - 1)
     );
 }
 
-
-/* =========================
-   DEMONY
-========================= */
-
-/*
-   Na razie wpisujemy tutaj demony,
-   które są już na stronie.
-*/
-
-const demons = {
-
-    "cobwebs": 1
-
-    // Przykład:
-    // "acheron": 2,
-    // "slaughterhouse": 3
-
-};
-
-
-/* =========================
-   ZNAJDŹ RANK DEMONA
-========================= */
-
-function getDemonRank(demon) {
-
-    const text =
-        String(demon)
-            .trim()
-            .toLowerCase();
-
-
-    /* =========================
-       np. top1 / top 1
-    ========================= */
-
-    const topMatch =
-        text.match(/^top\s*(\d+)$/);
-
-
-    if (topMatch) {
-
-        return Number(
-            topMatch[1]
-        );
-
-    }
-
-
-    /* =========================
-       nazwa demona
-    ========================= */
-
-    if (
-        demons[text] !== undefined
-    ) {
-
-        return demons[text];
-
-    }
-
-
-    /*
-       Nie znaleziono
-    */
-
-    console.warn(
-        "Nie znaleziono demona:",
-        demon
-    );
-
-    return null;
-
-}
-
-
-/* =========================
-   LOAD LEADERBOARD
-========================= */
 
 async function loadLeaderboard() {
-
-    const leaderboard =
-        document.getElementById(
-            "leaderboard-list"
-        );
-
+    const container = document.getElementById("leaderboard-list");
 
     try {
+        // Wczytujemy players.json oraz index.html
+        const [playersResponse, indexResponse] = await Promise.all([
+            fetch("./players.json"),
+            fetch("./index.html")
+        ]);
 
-        const response =
-            await fetch(
-                "./players.json",
-                {
-                    cache: "no-cache"
+        if (!playersResponse.ok) {
+            throw new Error("Nie można wczytać players.json");
+        }
+
+        if (!indexResponse.ok) {
+            throw new Error("Nie można wczytać index.html");
+        }
+
+        const players = await playersResponse.json();
+        const indexHTML = await indexResponse.text();
+
+
+        // ==========================================
+        // ODCZYTYWANIE DEMONÓW Z index.html
+        // ==========================================
+
+        const parser = new DOMParser();
+        const indexDocument = parser.parseFromString(
+            indexHTML,
+            "text/html"
+        );
+
+        const demonMap = {};
+
+        indexDocument.querySelectorAll(".demon-card").forEach(card => {
+
+            const id = card.id;
+
+            // np. "top1" -> 1
+            const match = id.match(/^top(\d+)$/i);
+
+            if (!match) return;
+
+            const rank = Number(match[1]);
+
+            const nameElement = card.querySelector(".demon-name");
+
+            if (!nameElement) return;
+
+            const name = nameElement.textContent
+                .trim()
+                .toLowerCase();
+
+            if (!name) return;
+
+            demonMap[name] = rank;
+        });
+
+
+        console.log("Demony znalezione na liście:", demonMap);
+
+
+        // ==========================================
+        // LICZENIE PLAYERÓW
+        // ==========================================
+
+        const leaderboard = players.map(player => {
+
+            let totalPoints = 0;
+            let completed = 0;
+            let bestRank = Infinity;
+
+            let top10 = 0;
+            let top25 = 0;
+            let top50 = 0;
+
+
+            if (!Array.isArray(player.Demons)) {
+                player.Demons = [];
+            }
+
+
+            player.Demons.forEach(demonName => {
+
+                if (!demonName) return;
+
+                const key = demonName
+                    .trim()
+                    .toLowerCase();
+
+                const rank = demonMap[key];
+
+
+                // Nie znaleziono demona na index.html
+                if (!rank) {
+                    console.warn(
+                        `Nie znaleziono "${demonName}" na index.html`
+                    );
+                    return;
                 }
-            );
 
 
-        if (!response.ok) {
+                const points = getPoints(rank);
 
-            throw new Error(
-                "HTTP " +
-                response.status
-            );
+                totalPoints += points;
+                completed++;
 
-        }
+                if (rank < bestRank) {
+                    bestRank = rank;
+                }
 
+                if (rank <= 10) {
+                    top10++;
+                }
 
-        const players =
-            await response.json();
+                if (rank <= 25) {
+                    top25++;
+                }
 
-
-        if (!Array.isArray(players)) {
-
-            throw new Error(
-                "players.json is not an array"
-            );
-
-        }
-
-
-        /* =========================
-           OBLICZANIE GRACZY
-        ========================= */
-
-        const rankedPlayers =
-            players.map(player => {
-
-                const playerDemons =
-                    Array.isArray(
-                        player.Demons
-                    )
-                        ? player.Demons
-                        : [];
-
-
-                let totalPoints = 0;
-
-                let bestRank = null;
-
-                let top10 = 0;
-
-                let top25 = 0;
-
-                let top50 = 0;
-
-                let validDemons = 0;
-
-
-                /* =========================
-                   DEMONY GRACZA
-                ========================= */
-
-                playerDemons.forEach(
-                    demon => {
-
-                        const rank =
-                            getDemonRank(
-                                demon
-                            );
-
-
-                        /*
-                           Nie znaleziono
-                        */
-
-                        if (
-                            rank === null
-                        ) {
-
-                            return;
-
-                        }
-
-
-                        /*
-                           Zły rank
-                        */
-
-                        if (
-                            rank < 1 ||
-                            rank > 150
-                        ) {
-
-                            return;
-
-                        }
-
-
-                        /* =========================
-                           PUNKTY
-                        ========================= */
-
-                        const points =
-                            getPoints(
-                                rank
-                            );
-
-
-                        totalPoints +=
-                            points;
-
-
-                        validDemons++;
-
-
-                        /* =========================
-                           BEST TOP
-                        ========================= */
-
-                        if (
-                            bestRank === null ||
-                            rank < bestRank
-                        ) {
-
-                            bestRank =
-                                rank;
-
-                        }
-
-
-                        /* =========================
-                           TOP 10
-                        ========================= */
-
-                        if (
-                            rank <= 10
-                        ) {
-
-                            top10++;
-
-                        }
-
-
-                        /* =========================
-                           TOP 25
-                        ========================= */
-
-                        if (
-                            rank <= 25
-                        ) {
-
-                            top25++;
-
-                        }
-
-
-                        /* =========================
-                           TOP 50
-                        ========================= */
-
-                        if (
-                            rank <= 50
-                        ) {
-
-                            top50++;
-
-                        }
-
-                    }
-                );
-
-
-                return {
-
-                    name:
-                        String(
-                            player.Player ||
-                            "Unknown"
-                        ),
-
-                    demons:
-                        validDemons,
-
-                    points:
-                        totalPoints,
-
-                    bestRank:
-                        bestRank,
-
-                    top10:
-                        top10,
-
-                    top25:
-                        top25,
-
-                    top50:
-                        top50
-
-                };
-
+                if (rank <= 50) {
+                    top50++;
+                }
             });
 
 
-        /* =========================
-           SORTOWANIE
-        ========================= */
-
-        rankedPlayers.sort(
-            (a, b) => {
-
-                /*
-                   Najpierw RK
-                */
-
-                if (
-                    b.points !==
-                    a.points
-                ) {
-
-                    return (
-                        b.points -
-                        a.points
-                    );
-
-                }
+            return {
+                name: player.Player,
+                points: totalPoints,
+                completed: completed,
+                bestRank: bestRank === Infinity
+                    ? "-"
+                    : bestRank,
+                top10: top10,
+                top25: top25,
+                top50: top50
+            };
+        });
 
 
-                /*
-                   Potem liczba demonów
-                */
+        // ==========================================
+        // SORTOWANIE
+        // ==========================================
 
-                if (
-                    b.demons !==
-                    a.demons
-                ) {
+        leaderboard.sort((a, b) => {
 
-                    return (
-                        b.demons -
-                        a.demons
-                    );
-
-                }
-
-
-                /*
-                   Na końcu najlepszy TOP
-                */
-
-                if (
-                    a.bestRank === null
-                ) {
-
-                    return 1;
-
-                }
-
-                if (
-                    b.bestRank === null
-                ) {
-
-                    return -1;
-
-                }
-
-
-                return (
-                    a.bestRank -
-                    b.bestRank
-                );
-
+            if (b.points !== a.points) {
+                return b.points - a.points;
             }
-        );
 
-
-        /* =========================
-           WYCZYŚĆ LOADING
-        ========================= */
-
-        leaderboard.innerHTML = "";
-
-
-        /* =========================
-           GENEROWANIE WIERSZY
-        ========================= */
-
-        rankedPlayers.forEach(
-            (player, index) => {
-
-                const position =
-                    index + 1;
-
-
-                const row =
-                    document.createElement(
-                        "div"
-                    );
-
-
-                row.className =
-                    "leaderboard-row";
-
-
-                /* TOP 3 */
-
-                if (
-                    position === 1
-                ) {
-
-                    row.classList.add(
-                        "leaderboard-first"
-                    );
-
-                }
-
-                else if (
-                    position === 2
-                ) {
-
-                    row.classList.add(
-                        "leaderboard-second"
-                    );
-
-                }
-
-                else if (
-                    position === 3
-                ) {
-
-                    row.classList.add(
-                        "leaderboard-third"
-                    );
-
-                }
-
-
-                /* BEST TOP */
-
-                const bestText =
-                    player.bestRank !== null
-
-                        ? ` • BEST TOP ${player.bestRank}`
-
-                        : "";
-
-
-                row.innerHTML = `
-
-                    <div class="leaderboard-position">
-
-                        #${position}
-
-                    </div>
-
-
-                    <div class="leaderboard-player">
-
-                        <div class="leaderboard-player-name">
-
-                            ${player.name}
-
-                        </div>
-
-
-                        <div class="leaderboard-player-stats">
-
-                            ${player.demons} DEMONS
-
-                            ${bestText}
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="leaderboard-tops">
-
-                        <span>
-                            TOP 10:
-                            ${player.top10}
-                        </span>
-
-                        <span>
-                            TOP 25:
-                            ${player.top25}
-                        </span>
-
-                        <span>
-                            TOP 50:
-                            ${player.top50}
-                        </span>
-
-                    </div>
-
-
-                    <div class="leaderboard-points">
-
-                        ${player.points}
-
-                        <small>RK</small>
-
-                    </div>
-
-                `;
-
-
-                leaderboard.appendChild(
-                    row
-                );
-
+            if (b.completed !== a.completed) {
+                return b.completed - a.completed;
             }
-        );
 
-    }
-
-    catch (error) {
-
-        console.error(
-            "Leaderboard error:",
-            error
-        );
+            return (a.bestRank || 999) - (b.bestRank || 999);
+        });
 
 
-        leaderboard.innerHTML = `
+        // ==========================================
+        // WYŚWIETLANIE
+        // ==========================================
 
-            <div class="leaderboard-error">
+        container.innerHTML = "";
 
-                Failed to load players.json.
 
+        leaderboard.forEach((player, index) => {
+
+            const row = document.createElement("div");
+
+            row.className = "leaderboard-row";
+
+
+            row.innerHTML = `
+                <div class="leaderboard-position">
+                    #${index + 1}
+                </div>
+
+                <div class="leaderboard-player">
+                    <div class="player-name">
+                        ${player.name}
+                    </div>
+
+                    <div class="player-info">
+                        ${player.completed} DEMONS •
+                        BEST TOP ${player.bestRank}
+                    </div>
+                </div>
+
+                <div class="leaderboard-stats">
+                    <div>TOP 10: ${player.top10}</div>
+                    <div>TOP 25: ${player.top25}</div>
+                    <div>TOP 50: ${player.top50}</div>
+                </div>
+
+                <div class="leaderboard-points">
+                    <strong>${player.points}</strong>
+                    <span>RK</span>
+                </div>
+            `;
+
+
+            container.appendChild(row);
+        });
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        container.innerHTML = `
+            <div class="leaderboard-loading">
+                Błąd podczas ładowania leaderboardu.
             </div>
-
         `;
-
     }
-
 }
 
 
-/* =========================
-   START
-========================= */
-
 loadLeaderboard();
-
 </script>
 </body>
 </html>
