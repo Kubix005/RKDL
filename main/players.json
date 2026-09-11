@@ -3,15 +3,13 @@
     "Player": "Kuba",
     "Demons": [
       "Cobwebs",
-      "Tartarus",
-      "Bloodbath"
+      "Tartarus"
     ]
   },
   {
     "Player": "Player2",
     "Demons": [
-      "Cobwebs",
-      "Bloodlust"
+      "Cobwebs"
     ]
   }
 ]
