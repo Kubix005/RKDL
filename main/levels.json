@@ -51,61 +51,71 @@
     },
     {
         "rank": 11,
+        "name": "Removed Submission",
+        "id": "52113279"
+    },
+    {
+        "rank": 12,
         "name": "Darkened",
         "id": "66085306"
     },
     {
-        "rank": 12,
+        "rank": 13,
         "name": "Sakupen Hell",
         "id": "23262780"    
     },
     {
-        "rank": 13,
+        "rank": 14,
         "name": "Bloodbath",
         "id": "10565740"
     },
     {
-        "rank": 14,
+        "rank": 15,
         "name": "Inflective",
         "id": "61591522"
     },
     {
-        "rank": 15,
+        "rank": 16,
         "name": "Cat Planet",
         "id": "84766628"
     },
     {
-        "rank": 16,
+        "rank": 17,
         "name": "Esencia",
         "id": "54988894"    
     },
     {
-        "rank": 17,
+        "rank": 18,
+        "name": "Quadratic Function",
+        "id": "105290756"
+    },
+    {
+        "rank": 19,
         "name": "Diligence",
         "id": "62419473"
     },
     {
-        "rank": 18,
+        "rank": 20,
         "name": "Crowd Control",
         "id": "69491632"
     },
     {
-        "rank": 19,
+        "rank": 21,
         "name": "Allegiance",
         "id": "20761188"
     },
     {
-        "rank": 20,
+        "rank": 22,
         "name": "Dreamer",
         "id": "75162476"
     },{
         
-        "rank": 21,
+        "rank": 23,
         "name": "Anya III",
         "id": "81257586"
     },
     {
-        "rank": 22,
+        "rank": 24,
         "name": "Cataclysm",
         "id": "3979721"
     }
