@@ -60,7 +60,22 @@
 
     </main>
 <script>
+
+
+// =====================================================
+// USTAWIENIA
+// =====================================================
+
+const PLAYERS_URL = "./players.json";
+const LEVELS_URL = "./levels.json";
+
+
+// =====================================================
+// PUNKTY
+// =====================================================
+
 function getPoints(rank) {
+
     const maxPoints = 1000;
     const minPoints = 1;
     const maxRank = 150;
@@ -71,229 +86,480 @@ function getPoints(rank) {
     );
 
     return Math.round(
-        maxPoints * Math.pow(multiplier, rank - 1)
+        maxPoints * Math.pow(
+            multiplier,
+            rank - 1
+        )
     );
 }
 
 
+// =====================================================
+// ESCAPE HTML
+// =====================================================
+
+function escapeHTML(text) {
+
+    return String(text)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+
+// =====================================================
+// LEADERBOARD
+// =====================================================
+
 async function loadLeaderboard() {
-    const container = document.getElementById("leaderboard-list");
+
+    const container =
+        document.getElementById(
+            "leaderboard-list"
+        );
+
 
     try {
-        // Wczytujemy players.json oraz index.html
-        const [playersResponse, indexResponse] = await Promise.all([
-            fetch("./players.json"),
-            fetch("./index.html")
+
+        // =================================================
+        // WCZYTUJEMY PLAYERS.JSON + LEVELS.JSON
+        // =================================================
+
+        const [
+            playersResponse,
+            levelsResponse
+        ] = await Promise.all([
+
+            fetch(PLAYERS_URL, {
+                cache: "no-cache"
+            }),
+
+            fetch(LEVELS_URL, {
+                cache: "no-cache"
+            })
+
         ]);
 
+
         if (!playersResponse.ok) {
-            throw new Error("Nie można wczytać players.json");
+            throw new Error(
+                "Nie można wczytać players.json"
+            );
         }
 
-        if (!indexResponse.ok) {
-            throw new Error("Nie można wczytać index.html");
+
+        if (!levelsResponse.ok) {
+            throw new Error(
+                "Nie można wczytać levels.json"
+            );
         }
 
-        const players = await playersResponse.json();
-        const indexHTML = await indexResponse.text();
+
+        const players =
+            await playersResponse.json();
 
 
-        // ==========================================
-        // ODCZYTYWANIE DEMONÓW Z index.html
-        // ==========================================
+        const levels =
+            await levelsResponse.json();
 
-        const parser = new DOMParser();
-        const indexDocument = parser.parseFromString(
-            indexHTML,
-            "text/html"
-        );
+
+        if (!Array.isArray(players)) {
+            throw new Error(
+                "players.json musi zawierać tablicę"
+            );
+        }
+
+
+        if (!Array.isArray(levels)) {
+            throw new Error(
+                "levels.json musi zawierać tablicę"
+            );
+        }
+
+
+        // =================================================
+        // TWORZYMY MAPĘ DEMON -> RANK
+        // =================================================
 
         const demonMap = {};
 
-        indexDocument.querySelectorAll(".demon-card").forEach(card => {
 
-            const id = card.id;
+        levels
+            .slice(0, 150)
+            .forEach((level, index) => {
 
-            // np. "top1" -> 1
-            const match = id.match(/^top(\d+)$/i);
-
-            if (!match) return;
-
-            const rank = Number(match[1]);
-
-            const nameElement = card.querySelector(".demon-name");
-
-            if (!nameElement) return;
-
-            const name = nameElement.textContent
-                .trim()
-                .toLowerCase();
-
-            if (!name) return;
-
-            demonMap[name] = rank;
-        });
+                const rank =
+                    index + 1;
 
 
-        console.log("Demony znalezione na liście:", demonMap);
-
-
-        // ==========================================
-        // LICZENIE PLAYERÓW
-        // ==========================================
-
-        const leaderboard = players.map(player => {
-
-            let totalPoints = 0;
-            let completed = 0;
-            let bestRank = Infinity;
-
-            let top10 = 0;
-            let top25 = 0;
-            let top50 = 0;
-
-
-            if (!Array.isArray(player.Demons)) {
-                player.Demons = [];
-            }
-
-
-            player.Demons.forEach(demonName => {
-
-                if (!demonName) return;
-
-                const key = demonName
-                    .trim()
-                    .toLowerCase();
-
-                const rank = demonMap[key];
-
-
-                // Nie znaleziono demona na index.html
-                if (!rank) {
-                    console.warn(
-                        `Nie znaleziono "${demonName}" na index.html`
-                    );
+                if (!level.name) {
                     return;
                 }
 
 
-                const points = getPoints(rank);
+                const name =
+                    String(level.name)
+                        .trim()
+                        .toLowerCase();
 
-                totalPoints += points;
-                completed++;
 
-                if (rank < bestRank) {
-                    bestRank = rank;
-                }
+                demonMap[name] =
+                    rank;
 
-                if (rank <= 10) {
-                    top10++;
-                }
-
-                if (rank <= 25) {
-                    top25++;
-                }
-
-                if (rank <= 50) {
-                    top50++;
-                }
             });
 
 
-            return {
-                name: player.Player,
-                points: totalPoints,
-                completed: completed,
-                bestRank: bestRank === Infinity
-                    ? "-"
-                    : bestRank,
-                top10: top10,
-                top25: top25,
-                top50: top50
-            };
-        });
+        console.log(
+            "Demony z levels.json:",
+            demonMap
+        );
 
 
-        // ==========================================
+        // =================================================
+        // LICZENIE PLAYERÓW
+        // =================================================
+
+        const leaderboard =
+            players.map(player => {
+
+                let totalPoints = 0;
+
+                let completed = 0;
+
+                let bestRank = Infinity;
+
+                let top10 = 0;
+
+                let top25 = 0;
+
+                let top50 = 0;
+
+
+                // -----------------------------------------
+                // DEMONY GRACZA
+                // -----------------------------------------
+
+                const playerDemons =
+                    Array.isArray(player.Demons)
+                        ? player.Demons
+                        : [];
+
+
+                playerDemons.forEach(
+                    demonName => {
+
+                        if (!demonName) {
+                            return;
+                        }
+
+
+                        const key =
+                            String(demonName)
+                                .trim()
+                                .toLowerCase();
+
+
+                        const rank =
+                            demonMap[key];
+
+
+                        // ---------------------------------
+                        // DEMON NIE JEST NA LIŚCIE
+                        // ---------------------------------
+
+                        if (!rank) {
+
+                            console.warn(
+                                `Nie znaleziono "${demonName}" w levels.json`
+                            );
+
+                            return;
+
+                        }
+
+
+                        // ---------------------------------
+                        // PUNKTY
+                        // ---------------------------------
+
+                        const points =
+                            getPoints(rank);
+
+
+                        totalPoints += points;
+
+                        completed++;
+
+
+                        // ---------------------------------
+                        // BEST
+                        // ---------------------------------
+
+                        if (rank < bestRank) {
+
+                            bestRank =
+                                rank;
+
+                        }
+
+
+                        // ---------------------------------
+                        // TOP 10
+                        // ---------------------------------
+
+                        if (rank <= 10) {
+
+                            top10++;
+
+                        }
+
+
+                        // ---------------------------------
+                        // TOP 25
+                        // ---------------------------------
+
+                        if (rank <= 25) {
+
+                            top25++;
+
+                        }
+
+
+                        // ---------------------------------
+                        // TOP 50
+                        // ---------------------------------
+
+                        if (rank <= 50) {
+
+                            top50++;
+
+                        }
+
+                    }
+                );
+
+
+                return {
+
+                    name:
+                        String(
+                            player.Player || ""
+                        ),
+
+                    points:
+                        totalPoints,
+
+                    completed:
+                        completed,
+
+                    bestRank:
+                        bestRank === Infinity
+                            ? "-"
+                            : bestRank,
+
+                    top10:
+                        top10,
+
+                    top25:
+                        top25,
+
+                    top50:
+                        top50
+
+                };
+
+            });
+
+
+        // =================================================
         // SORTOWANIE
-        // ==========================================
+        // =================================================
 
-        leaderboard.sort((a, b) => {
+        leaderboard.sort(
+            (a, b) => {
 
-            if (b.points !== a.points) {
-                return b.points - a.points;
+                // Najpierw punkty
+                if (
+                    b.points !==
+                    a.points
+                ) {
+
+                    return (
+                        b.points -
+                        a.points
+                    );
+
+                }
+
+
+                // Potem liczba demonów
+                if (
+                    b.completed !==
+                    a.completed
+                ) {
+
+                    return (
+                        b.completed -
+                        a.completed
+                    );
+
+                }
+
+
+                // Na końcu najlepszy rank
+                return (
+                    (a.bestRank === "-"
+                        ? 999
+                        : a.bestRank
+                    )
+                    -
+                    (b.bestRank === "-"
+                        ? 999
+                        : b.bestRank
+                    )
+                );
+
             }
-
-            if (b.completed !== a.completed) {
-                return b.completed - a.completed;
-            }
-
-            return (a.bestRank || 999) - (b.bestRank || 999);
-        });
+        );
 
 
-        // ==========================================
+        // =================================================
         // WYŚWIETLANIE
-        // ==========================================
+        // =================================================
 
         container.innerHTML = "";
 
 
-        leaderboard.forEach((player, index) => {
+        leaderboard.forEach(
+            (player, index) => {
 
-            const row = document.createElement("div");
+                const row =
+                    document.createElement(
+                        "div"
+                    );
 
-            row.className = "leaderboard-row";
+
+                row.className =
+                    "leaderboard-row";
 
 
-            row.innerHTML = `
-                <div class="leaderboard-position">
-                    #${index + 1}
-                </div>
+                row.innerHTML = `
 
-                <div class="leaderboard-player">
-                    <div class="player-name">
-                        ${player.name}
+                    <div class="leaderboard-position">
+                        #${index + 1}
                     </div>
 
-                    <div class="player-info">
-                        ${player.completed} DEMONS •
-                        BEST TOP ${player.bestRank}
+
+                    <div class="leaderboard-player">
+
+                        <div class="player-name">
+                            ${escapeHTML(player.name)}
+                        </div>
+
+                        <div class="player-info">
+                            ${player.completed} DEMONS
+                            •
+                            BEST TOP ${player.bestRank}
+                        </div>
+
                     </div>
-                </div>
-
-                <div class="leaderboard-stats">
-                    <div>TOP 10: ${player.top10}</div>
-                    <div>TOP 25: ${player.top25}</div>
-                    <div>TOP 50: ${player.top50}</div>
-                </div>
-
-                <div class="leaderboard-points">
-                    <strong>${player.points}</strong>
-                    <span>RK</span>
-                </div>
-            `;
 
 
-            container.appendChild(row);
-        });
+                    <div class="leaderboard-stats">
+
+                        <div>
+                            TOP 10:
+                            ${player.top10}
+                        </div>
+
+                        <div>
+                            TOP 25:
+                            ${player.top25}
+                        </div>
+
+                        <div>
+                            TOP 50:
+                            ${player.top50}
+                        </div>
+
+                    </div>
 
 
-    } catch (error) {
+                    <div class="leaderboard-points">
 
-        console.error(error);
+                        <strong>
+                            ${player.points}
+                        </strong>
+
+                        <span>
+                            RK
+                        </span>
+
+                    </div>
+
+                `;
+
+
+                container.appendChild(
+                    row
+                );
+
+            }
+        );
+
+
+        console.log(
+            "Leaderboard załadowany poprawnie."
+        );
+
+    }
+
+
+    catch (error) {
+
+        console.error(
+            "Błąd leaderboardu:",
+            error
+        );
+
 
         container.innerHTML = `
+
             <div class="leaderboard-loading">
+
                 Błąd podczas ładowania leaderboardu.
+
+                <br><br>
+
+                <small>
+                    ${escapeHTML(error.message)}
+                </small>
+
             </div>
+
         `;
+
     }
+
 }
 
 
-loadLeaderboard();
+// =====================================================
+// START
+// =====================================================
+
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        loadLeaderboard();
+
+    }
+);
+
 </script>
 </body>
 </html>
