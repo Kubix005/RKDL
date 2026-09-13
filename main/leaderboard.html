@@ -76,9 +76,9 @@ const LEVELS_URL = "./levels.json";
 
 function getPoints(rank) {
 
-    const maxPoints = 1000;
+    const maxPoints = 100;
     const minPoints = 1;
-    const maxRank = 150;
+    const maxRank = 24;
 
     const multiplier = Math.pow(
         minPoints / maxPoints,
@@ -188,7 +188,7 @@ async function loadLeaderboard() {
 
 
         levels
-            .slice(0, 150)
+            .slice(0,24)
             .forEach((level, index) => {
 
                 const rank =
