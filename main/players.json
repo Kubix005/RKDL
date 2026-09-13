@@ -36,5 +36,13 @@
     "Demons": [
       "Dreamer"
     ]
+  },
+  {
+    "Player": "Garnuszek",
+    "Demons": [
+      "Cobwebs",
+      "Quantum Processing",
+      "Dmg Ctrl"
+    ]
   }
 ]
