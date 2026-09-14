@@ -106,5 +106,38 @@
       "Allegiance",
       "Cataclysm"
     ]
+  },
+  {
+    "Player": "Zank",
+    "Demons":[
+      "Rust",
+      "calamity",
+      "Sink"
+    ]
+
+  },
+  {
+    "Player": "Patelnia",
+    "Demons":[
+      "Jesse Pinkman",
+      "Zaphkiel",
+      "Chromatic Haze"
+    ]
+  },
+  {
+    "Player":"Kublinek",
+    "Demons":[
+      "Rust",
+      "Plasma Pulse Finale",
+      "Sonic Wave"
+    ]
+  },
+  {
+    "Player":"Online",
+    "Demons":[
+      "Firework",
+      "The Rupture",
+      "The Yandere"
+    ]
   }
 ]
