@@ -90,7 +90,7 @@ let players = [];
 function getPoints(rank) {
     const maxPoints = 100;
     const minPoints = 1;
-    const maxRank = 35;
+    const maxRank = 150;
 
     const multiplier = Math.pow(
         minPoints / maxPoints,
@@ -138,7 +138,7 @@ async function loadLevels() {
         }
 
         // Maksymalnie TOP 150
-        levels = data.slice(0, 35);
+        levels = data.slice(0, 150);
 
         generateDemonCards();
         generateRanking();
