@@ -557,8 +557,12 @@ function showPlayer(player) {
         </div>
 
         <span class="search-result-points">
-            ${player.Demons.length} DEMONS
-        </span>
+    ${player.Demons.reduce((total, demon) => {
+        const card = findDemonById(demon) || findDemonByName(demon);
+        const rank = getDemonRank(card);
+        return total + (rank ? getPoints(rank) : 0);
+    }, 0)} RK
+</span>
     `;
 
     searchResults.appendChild(header);
