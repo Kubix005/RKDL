@@ -78,7 +78,7 @@ function getPoints(rank) {
 
     const maxPoints = 100;
     const minPoints = 1;
-    const maxRank = 25;
+    const maxRank =35;
 
     const multiplier = Math.pow(
         minPoints / maxPoints,
@@ -188,7 +188,7 @@ async function loadLeaderboard() {
 
 
         levels
-            .slice(0,25)
+            .slice(0,35)
             .forEach((level, index) => {
 
                 const rank =
