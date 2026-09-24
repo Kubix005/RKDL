@@ -85,6 +85,8 @@
   },
   {
     "Player": "Tedor",
+    "tag": "recent",
+    "recent": "Moment",
     "Demons": [
       "Removed Submission",
       "Moment",

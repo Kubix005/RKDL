@@ -18,9 +18,14 @@
         <p id="R3">Demon</p>
         <p id="R4">List</p>
     </header>
-    <a href="leaderboard.html" class="leaderboard-button">
-    🏆 LEADERBOARD
-</a>
+    <div class="action-links">
+        <a href="leaderboard.html" class="leaderboard-button">
+        🏆 LEADERBOARD
+        </a>
+        <a href="recently.html" id="recently-button" class="leaderboard-button recently-button">
+        🕒 OSTATNIO WBITE
+        </a>
+    </div>
 
     <!-- PLAYER / DEMON SEARCH -->
 <div class="search-panel">
@@ -987,6 +992,39 @@ function setupSearch() {
 
 
 // =====================================================
+// RECENTLY BEAT BUTTON
+// =====================================================
+
+function setupRecentlyButton() {
+
+    const button = document.getElementById("recently-button");
+
+    if (!button) {
+        return;
+    }
+
+    const recentPlayer = players.find(player => {
+        const tag = Array.isArray(player.tag) ? player.tag : [player.tag];
+        return tag.some(value => String(value).toLowerCase() === "recent");
+    });
+
+    if (!recentPlayer || !recentPlayer.recent) {
+        return;
+    }
+
+    const recentLevel = levels.find(level =>
+        String(level.name).trim().toLowerCase() ===
+        String(recentPlayer.recent).trim().toLowerCase()
+    );
+
+    if (recentLevel) {
+        button.style.backgroundImage = `linear-gradient(rgba(0, 35, 0, 0.42), rgba(0, 20, 0, 0.78)), url("${THUMBNAIL_URL}/${recentLevel.id}.webp")`;
+        button.title = `${recentPlayer.Player} recently beat ${recentLevel.name}`;
+    }
+}
+
+
+// =====================================================
 // START
 // =====================================================
 
@@ -997,6 +1035,8 @@ document.addEventListener(
         await loadLevels();
 
         await loadPlayers();
+
+        setupRecentlyButton();
 
         setupSearch();
 

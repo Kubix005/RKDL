@@ -995,6 +995,53 @@ body::before {
 
 }
 
+.action-links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin: 20px auto;
+}
+
+.action-links .leaderboard-button {
+    width: 250px;
+    height: 72px;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.recently-button {
+    min-width: 250px;
+    min-height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #111;
+    background-image:
+        linear-gradient(
+            rgba(0, 35, 0, 0.42),
+            rgba(0, 20, 0, 0.78)
+        ),
+        url("https://raw.githubusercontent.com/All-Rated-Extreme-Demon-List/Thumbnails/main/levels/cards/68848817.webp");
+    background-position: center;
+    background-size: cover;
+    border-color: #168b35;
+    text-shadow: 2px 2px 5px black;
+}
+
+.recently-button:hover {
+    filter: grayscale(1);
+}
+
+.page-links {
+    display: flex;
+    justify-content: center;
+    margin: -20px auto 30px;
+}
+
 
 /* =========================
    LEADERBOARD PAGE
@@ -1212,6 +1259,79 @@ body::before {
 
 }
 
+/* =========================
+   RECENTLY BEAT PAGE
+========================= */
+
+.recently-page {
+    width: min(1100px, 90%);
+    margin: 40px auto 80px;
+}
+
+.recently-title {
+    margin-bottom: 8px;
+    font-size: 32px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.recently-subtitle {
+    margin-bottom: 30px;
+    opacity: 0.6;
+    text-align: center;
+}
+
+.recently-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 22px;
+}
+
+.recently-card {
+    overflow: hidden;
+    background: #020602;
+    border: 1px solid rgba(0, 255, 50, 0.25);
+    border-radius: 8px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.55);
+}
+
+.recently-image {
+    position: relative;
+}
+
+.recently-card img {
+    display: block;
+    width: 100%;
+    height: 10vh;
+    object-fit: cover;
+}
+
+.recently-card-content {
+    padding: 16px 18px;
+}
+
+.recently-player {
+    margin-bottom: 6px;
+    color: #7cff7c;
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.recently-demon {
+    font-size: 21px;
+    font-weight: bold;
+}
+
+.recently-empty {
+    padding: 40px;
+    border: 1px solid rgba(0, 255, 50, 0.2);
+    border-radius: 8px;
+    color: rgba(255, 255, 255, 0.6);
+    text-align: center;
+}
+
 
 /* =========================
    MOBILE
@@ -1240,6 +1360,14 @@ body::before {
 
         font-size: 18px;
 
+    }
+
+    .recently-page {
+        width: 94%;
+    }
+
+    .recently-title {
+        font-size: 25px;
     }
 
 }
