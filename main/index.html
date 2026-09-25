@@ -80,12 +80,14 @@
 
 const LEVELS_URL = "./levels.json";
 const PLAYERS_URL = "./players.json";
+const AREDL_RANKS_URL = "./aredl-ranks.json";
 
 const THUMBNAIL_URL =
     "https://raw.githubusercontent.com/All-Rated-Extreme-Demon-List/Thumbnails/main/levels/cards";
 
 let levels = [];
 let players = [];
+let aredlRanks = {};
 
 
 // =====================================================
@@ -145,6 +147,8 @@ async function loadLevels() {
         // Maksymalnie TOP 150
         levels = data.slice(0, 150);
 
+        await loadAredlRanks();
+
         generateDemonCards();
         generateRanking();
 
@@ -167,6 +171,35 @@ async function loadLevels() {
                 znajduje się obok tego HTML.
             </div>
         `;
+    }
+}
+
+
+async function loadAredlRanks() {
+
+    try {
+
+        const response = await fetch(AREDL_RANKS_URL, {
+            cache: "no-cache"
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+
+        const snapshot = await response.json();
+
+        if (!snapshot.ranks || typeof snapshot.ranks !== "object" || Array.isArray(snapshot.ranks)) {
+            throw new Error("aredl-ranks.json musi zawierać obiekt ranks");
+        }
+
+        aredlRanks = snapshot.ranks;
+
+    } catch (error) {
+
+        console.warn("Nie udało się załadować rankingu AREDL:", error);
+        aredlRanks = {};
+
     }
 }
 
@@ -206,10 +239,40 @@ function generateDemonCards() {
             document.createElement("div");
 
         rankElement.className =
-            "demon-rank";
+            "top-number";
 
-        rankElement.textContent =
+        const rankLabel =
+            document.createElement("span");
+
+        rankLabel.textContent =
             `TOP ${rank}`;
+
+        rankElement.appendChild(rankLabel);
+
+        const aredlRank =
+            aredlRanks[String(level.id)];
+
+        if (Number.isInteger(aredlRank)) {
+            const aredlLink =
+                document.createElement("a");
+
+            aredlLink.className =
+                "aredl-rank";
+
+            aredlLink.href =
+                `https://aredl.net/list/${level.id}`;
+
+            aredlLink.target =
+                "_blank";
+
+            aredlLink.rel =
+                "noopener noreferrer";
+
+            aredlLink.textContent =
+                `AREDL #${aredlRank}`;
+
+            rankElement.appendChild(aredlLink);
+        }
 
 
         // =============================================

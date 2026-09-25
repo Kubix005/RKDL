@@ -468,7 +468,9 @@ body::before {
 
 .top-number {
 
-    width: 120px;
+    width: fit-content;
+    min-width: 120px;
+    padding: 0 12px;
 
     height: 45px;
 
@@ -476,7 +478,11 @@ body::before {
 
     align-items: center;
 
-    justify-content: center;
+    justify-content: space-between;
+
+    gap: 8px;
+
+    white-space: nowrap;
 
     background:
         linear-gradient(
@@ -712,6 +718,16 @@ body::before {
         2px 2px 4px black;
 
     z-index: 5;
+}
+
+.aredl-rank {
+    color: white;
+    font-size: 12px;
+    text-decoration: underline dotted;
+}
+
+.aredl-rank:hover {
+    color: #b8ffb8;
 }
 
 /* =================================
