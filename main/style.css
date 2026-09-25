@@ -1020,12 +1020,6 @@ body::before {
     align-items: center;
     justify-content: center;
     background-color: #111;
-    background-image:
-        linear-gradient(
-            rgba(0, 35, 0, 0.42),
-            rgba(0, 20, 0, 0.78)
-        ),
-        url("https://raw.githubusercontent.com/All-Rated-Extreme-Demon-List/Thumbnails/main/levels/cards/68848817.webp");
     background-position: center;
     background-size: cover;
     border-color: #168b35;

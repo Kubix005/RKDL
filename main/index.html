@@ -498,6 +498,9 @@ async function loadPlayers() {
                         player.Player || ""
                     ),
 
+                tag: player.tag,
+                recent: player.recent,
+
                 Demons:
                     Array.isArray(player.Demons)
                         ? player.Demons.map(
