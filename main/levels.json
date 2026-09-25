@@ -60,128 +60,133 @@
         "id": "26681070"
     },
     {
-        "rank": 13,
+        "rank":13,
+        "name": "Yatagarasu",
+        "id":"28220417"
+    },
+    {
+        "rank": 14,
         "name": "Molten Core",
         "id": "68414488"
     },
     {
 
-        "rank":14,
+        "rank":15,
         "name":"Chromatic Haze",
         "id":"62869408"
     },
     {
-        "rank": 15,
+        "rank": 16,
         "name": "Stalemate Redux",
         "id": "37398911"
     },
     {
-        "rank": 16,
+        "rank": 17,
         "name": "Zaphkiel",
         "id": "36329434"
     },
     {
-        "rank": 17,
+        "rank": 18,
         "name": "Killbot",
         "id": "38754426"
     },
     {
-        "rank": 18,
+        "rank": 19,
         "name": "Artificial Ascent",
         "id": "27122654"
     },
     {
-        "rank": 19,
+        "rank": 20,
         "name": "Quantum Processing",
         "id": "38235367"
     },
     {
-        "rank": 20,
+        "rank": 21,
         "name": "Dmg Ctrl",
         "id": "73733373"
     },
     {
-        "rank": 21,
+        "rank": 22,
         "name": "Hatred",
         "id": "27580467"
     },
     {
-        "rank": 22,
+        "rank": 23,
         "name": "Subsonic",
         "id": "33387622"
     },
     {
-        "rank": 23,
+        "rank": 24,
         "name": "Removed Submission",
         "id": "52113279"
     },
     {
-        "rank": 24,
+        "rank": 25,
         "name": "Darkened",
         "id": "66085306"
     },
     {
-        "rank": 25,
+        "rank": 26,
         "name": "Sakupen Hell",
         "id": "23262780"    
     },
     {
-        "rank":26,
+        "rank":27,
         "name": "Moment",
         "id": "68848817"
     },
     {
-        "rank": 27,
+        "rank": 28,
         "name": "Bloodbath",
         "id": "10565740"
     },
     {
-        "rank": 28,
+        "rank": 29,
         "name": "Inflective",
         "id": "61591522"
     },
     {
-        "rank": 29,
+        "rank": 30,
         "name": "Cat Planet",
         "id": "84766628"
     },
     {
-        "rank": 30,
+        "rank": 31,
         "name": "Esencia",
         "id": "54988894"    
     },
     {
-        "rank": 31,
+        "rank": 32,
         "name": "Quadratic Function",
         "id": "105290756"
     },
     {
-        "rank": 32,
+        "rank": 33,
         "name": "Diligence",
         "id": "62419473"
     },
     {
-        "rank": 33,
+        "rank": 34,
         "name": "Crowd Control",
         "id": "69491632"
     },
     {
-        "rank": 34,
+        "rank": 35,
         "name": "Allegiance",
         "id": "20761188"
     },
     {
-        "rank": 35,
+        "rank": 36,
         "name": "Dreamer",
         "id": "75162476"
     },{
         
-        "rank": 36,
+        "rank": 37,
         "name": "Anya III",
         "id": "81257586"
     },
     {
-        "rank": 37,
+        "rank": 38,
         "name": "Cataclysm",
         "id": "3979721"
     }

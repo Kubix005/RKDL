@@ -17,6 +17,8 @@
   },
   {
     "Player": "Kingryan0",
+        "tag": "recent",
+    "recent": "Molten Core",
     "Demons": [
       "Molten Core",
       "Cat Planet",
@@ -85,8 +87,6 @@
   },
   {
     "Player": "Tedor",
-    "tag": "recent",
-    "recent": "Moment",
     "Demons": [
       "Removed Submission",
       "Moment",
@@ -140,6 +140,14 @@
       "Firework",
       "The Rupture",
       "The Yandere"
+    ]
+  },
+  {
+    "Player":"Kicek1146",
+    "Demons":[
+      "Yatagarasu",
+      "Artificial Ascent",
+      "Subsonic"
     ]
   }
 ]
