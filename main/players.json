@@ -17,8 +17,6 @@
   },
   {
     "Player": "Kingryan0",
-        "tag": "recent",
-    "recent": "Molten Core",
     "Demons": [
       "Molten Core",
       "Cat Planet",
@@ -71,6 +69,8 @@
   },
   {
     "Player": "JestemRysiek",
+            "tag": "recent",
+    "recent": "Blade Of Justice",
     "Demons": [
       "Blade Of Justice",
       "Bloodbath",
