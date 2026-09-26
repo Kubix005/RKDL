@@ -102,26 +102,31 @@
     },
     {
         "rank": 21,
+        "name": "Black Blizzard",
+        "id": "34057654"
+    },
+    {
+        "rank": 22,
         "name": "Dmg Ctrl",
         "id": "73733373"
     },
     {
-        "rank": 22,
+        "rank": 23,
         "name": "Hatred",
         "id": "27580467"
     },
     {
-        "rank": 23,
+        "rank": 24,
         "name": "Subsonic",
         "id": "33387622"
     },
     {
-        "rank": 24,
+        "rank": 25,
         "name": "Removed Submission",
         "id": "52113279"
     },
     {
-        "rank": 25,
+        "rank": 26,
         "name": "Darkened",
         "id": "66085306"
     },
@@ -134,6 +139,11 @@
         "rank":27,
         "name": "Moment",
         "id": "68848817"
+    },
+    {
+        "rank": 28,
+        "name":"Gravity",
+        "id":"77008332"
     },
     {
         "rank": 28,

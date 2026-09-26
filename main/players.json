@@ -149,5 +149,21 @@
       "Artificial Ascent",
       "Subsonic"
     ]
+  },
+   {
+    "Player":"Szymus",
+    "Demons":[
+      "Wasureta",
+      "Chromatic Haze",
+      "Black Blizzard"
+    ]
+  },
+   {
+    "Player":"Fabi",
+    "Demons":[
+      "Black Blizzard",
+      "Moment",
+      "Gravity"
+    ]
   }
 ]
