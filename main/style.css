@@ -1049,7 +1049,18 @@ body::before {
 .page-links {
     display: flex;
     justify-content: center;
+    flex-wrap: wrap;
+    gap: 14px;
     margin: -20px auto 30px;
+}
+
+.page-links .leaderboard-button {
+    width: 250px;
+    height: 72px;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 
@@ -1342,6 +1353,102 @@ body::before {
     text-align: center;
 }
 
+/* =========================
+   LEVEL VICTORS PAGE
+========================= */
+
+.winners-page {
+    width: min(1100px, 92%);
+    margin: 40px auto 80px;
+}
+
+.winners-title {
+    margin-bottom: 28px;
+    font-size: 32px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.winners-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.winner-level {
+    display: grid;
+    grid-template-columns: minmax(180px, 28%) minmax(0, 1fr);
+    overflow: hidden;
+    background: #020602;
+    border: 1px solid rgba(0, 255, 50, 0.25);
+    border-radius: 8px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+}
+
+.winner-level-visual {
+    position: relative;
+    min-height: 150px;
+    background: #061006;
+}
+
+.winner-level-image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-height: 150px;
+    object-fit: cover;
+}
+
+.winner-level-rank {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    padding: 8px 12px;
+    background: rgba(0, 130, 0, 0.94);
+    border: 1px solid rgba(120, 255, 120, 0.5);
+    border-radius: 6px;
+    font-family: Pusab, Arial Black, sans-serif;
+    font-size: 14px;
+    text-shadow: 2px 2px 4px black;
+}
+
+.winner-level-content {
+    min-width: 0;
+    padding: 18px 20px;
+}
+
+.winner-level-name {
+    margin-bottom: 12px;
+    font-family: Pusab, Arial Black, sans-serif;
+    font-size: 21px;
+    overflow-wrap: anywhere;
+}
+
+.winner-victors {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.winner-victor {
+    padding: 7px 10px;
+    color: #b8ffb8;
+    background: rgba(0, 110, 0, 0.28);
+    border: 1px solid rgba(0, 255, 50, 0.25);
+    border-radius: 6px;
+    overflow-wrap: anywhere;
+}
+
+.winner-empty {
+    color: rgba(255, 255, 255, 0.55);
+}
+
+.winners-message {
+    padding: 30px;
+    color: rgba(255, 255, 255, 0.65);
+    text-align: center;
+}
+
 
 /* =========================
    MOBILE
@@ -1378,6 +1485,29 @@ body::before {
 
     .recently-title {
         font-size: 25px;
+    }
+
+    .winners-page {
+        width: 94%;
+        margin-top: 28px;
+    }
+
+    .winners-title {
+        font-size: 25px;
+    }
+
+    .winner-level {
+        grid-template-columns: 1fr;
+    }
+
+    .winner-level-visual,
+    .winner-level-image {
+        height: 180px;
+        min-height: 180px;
+    }
+
+    .winner-level-content {
+        padding: 15px;
     }
 
 }

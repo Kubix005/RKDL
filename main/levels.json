@@ -1,207 +1,165 @@
 [
     {
-        "rank":1,
-        "name":"Firework",
-        "id":"75206202"
+        "name": "Firework",
+        "id": "75206202"
     },
     {
-        "rank": 2,
         "name": "Renevant",
         "id": "58161496"
     },
     {
-        "rank": 3,
         "name": "Rust",
         "id": "71912451"
     },
     {
-        "rank":4,
         "name": "Cobwebs",
         "id": "82172844"
     },
     {
-        "rank":5,
-        "name":"The Rupture",
-        "id":"57828784"
+        "name": "The Rupture",
+        "id": "57828784"
     },
     {
-        "rank": 6,
         "name": "Jesse Pinkman",
         "id": "79918576"
     },
     {
-        "rank":7,
-        "name":"The Yandere",
-        "id":"54615662"
+        "name": "The Yandere",
+        "id": "54615662"
     },
     {
-        "rank":8,
-        "name":"Plasma Pulse Finale",
-        "id":"38655495"
+        "name": "Plasma Pulse Finale",
+        "id": "38655495"
     },
     {
-        "rank": 9,
         "name": "Calamity",
         "id": "64766514"
     },
     {
-        "rank": 10,
         "name": "Wasureta",
         "id": "64658786"
     },
     {
-        "rank": 11,
         "name": "Sink",
         "id": "77255632"
     },
     {
-        "rank": 12,
         "name": "Sonic Wave",
         "id": "26681070"
     },
     {
-        "rank":13,
         "name": "Yatagarasu",
-        "id":"28220417"
+        "id": "28220417"
     },
     {
-        "rank": 14,
         "name": "Molten Core",
         "id": "68414488"
     },
     {
-
-        "rank":15,
-        "name":"Chromatic Haze",
-        "id":"62869408"
+        "name": "Chromatic Haze",
+        "id": "62869408"
     },
     {
-        "rank": 16,
         "name": "Stalemate Redux",
         "id": "37398911"
     },
     {
-        "rank": 17,
         "name": "Zaphkiel",
         "id": "36329434"
     },
     {
-        "rank": 18,
         "name": "Killbot",
         "id": "38754426"
     },
     {
-        "rank": 19,
         "name": "Artificial Ascent",
         "id": "27122654"
     },
     {
-        "rank": 20,
         "name": "Quantum Processing",
         "id": "38235367"
     },
     {
-        "rank": 21,
         "name": "Black Blizzard",
         "id": "34057654"
     },
     {
-        "rank": 22,
         "name": "Dmg Ctrl",
         "id": "73733373"
     },
     {
-        "rank": 23,
         "name": "Hatred",
         "id": "27580467"
     },
     {
-        "rank": 24,
         "name": "Subsonic",
         "id": "33387622"
     },
     {
-        "rank": 25,
         "name": "Removed Submission",
         "id": "52113279"
     },
     {
-        "rank": 26,
         "name": "Darkened",
         "id": "66085306"
     },
     {
-        "rank": 27,
         "name": "Blade Of Justice",
         "id": "35448603"
     },
     {
-        "rank": 28,
         "name": "Sakupen Hell",
-        "id": "23262780"    
+        "id": "23262780"
     },
     {
-        "rank":29,
         "name": "Moment",
         "id": "68848817"
     },
     {
-        "rank": 30,
-        "name":"Gravity",
-        "id":"77008332"
+        "name": "Gravity",
+        "id": "77008332"
     },
     {
-        "rank": 31,
         "name": "Bloodbath",
         "id": "10565740"
     },
     {
-        "rank": 32,
         "name": "Inflective",
         "id": "61591522"
     },
     {
-        "rank": 33,
         "name": "Cat Planet",
         "id": "84766628"
     },
     {
-        "rank": 34,
         "name": "Esencia",
-        "id": "54988894"    
+        "id": "54988894"
     },
     {
-        "rank": 35,
         "name": "Quadratic Function",
         "id": "105290756"
     },
     {
-        "rank": 36,
         "name": "Diligence",
         "id": "62419473"
     },
     {
-        "rank": 37,
         "name": "Crowd Control",
         "id": "69491632"
     },
     {
-        "rank": 38,
         "name": "Allegiance",
         "id": "20761188"
     },
     {
-        "rank": 39,
         "name": "Dreamer",
         "id": "75162476"
-    },{
-        
-        "rank": 40,
+    },
+    {
         "name": "Anya III",
         "id": "81257586"
     },
     {
-        "rank": 41,
         "name": "Cataclysm",
         "id": "3979721"
     }

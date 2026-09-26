@@ -1,6 +1,9 @@
 name: Update AREDL ranks
 
 on:
+  push:
+    paths:
+      - "main/levels.json"
   schedule:
     - cron: "17 6 * * *"
   workflow_dispatch:
