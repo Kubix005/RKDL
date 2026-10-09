@@ -69,8 +69,6 @@
   },
   {
     "Player": "JestemRysiek",
-            "tag": "recent",
-    "recent": "Blade Of Justice",
     "Demons": [
       "Blade Of Justice",
       "Bloodbath",
@@ -103,10 +101,12 @@
   },
   {
     "Player": "Lodomir238",
+    "tag": "recent",
+    "recent": "Moment",
     "Demons": [
+      "Moment",
       "Crowd Control",
-      "Allegiance",
-      "Cataclysm"
+      "Allegiance"
     ]
   },
   {
