@@ -101,8 +101,6 @@
   },
   {
     "Player": "Lodomir238",
-    "tag": "recent",
-    "recent": "Broken Signal",
     "Demons": [
       "Moment",
       "Broken Signal",
@@ -144,6 +142,9 @@
   },
   {
     "Player":"Kicek1146",
+
+    "tag": "recent",
+    "recent": "Renevant",
     "Demons":[
       "Renevant",
       "Yatagarasu",
