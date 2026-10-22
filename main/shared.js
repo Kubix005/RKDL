@@ -1,5 +1,5 @@
 function getPoints(rank) {
-    const maxPoints = 400;
+    const maxPoints = 500;
     const minPoints = 1;
     const maxRank = 150;
     const multiplier = Math.pow(minPoints / maxPoints, 1 / (maxRank - 1));
