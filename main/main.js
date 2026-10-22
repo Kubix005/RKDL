@@ -1,5 +1,6 @@
 const LEVELS_URL = "./levels.json";
 const PLAYERS_URL = "./players.json";
+const PROGRESS_URL = "./progress.json";
 const AREDL_RANKS_URL = "./aredl-ranks.json";
 
 const THUMBNAIL_URL =
@@ -7,6 +8,7 @@ const THUMBNAIL_URL =
 
 let levels = [];
 let players = [];
+let progressEntries = [];
 let aredlRanks = {};
 let legacyLevelNames = new Set();
 
@@ -266,6 +268,64 @@ function generateDemonCards() {
 
         card.appendChild(name);
 
+        const levelProgress = getProgressForLevel(level);
+
+        if (levelProgress.length > 0) {
+            const progressSection = document.createElement("div");
+            progressSection.className = "level-progress";
+
+            const progressTitle = document.createElement("div");
+            progressTitle.className = "level-progress-title";
+            progressTitle.textContent = "PROGRES";
+            progressSection.appendChild(progressTitle);
+
+            const progressGrid = document.createElement("div");
+            progressGrid.className = "level-progress-grid";
+
+            levelProgress.forEach(entry => {
+                const progressRow = document.createElement("div");
+                progressRow.className = "level-progress-entry";
+
+                const playerName = document.createElement("span");
+                playerName.className = "level-progress-player";
+                playerName.textContent = entry.player;
+
+                const progressTrack = document.createElement("span");
+                progressTrack.className = "level-progress-track";
+                progressTrack.setAttribute("role", "img");
+                progressTrack.setAttribute(
+                    "aria-label",
+                    `Progres: ${entry.procent.label}`
+                );
+
+                entry.procent.segments.forEach(segment => {
+                    const progressFill = document.createElement("span");
+                    progressFill.className = "level-progress-fill";
+                    if (segment.reverseGradient) {
+                        progressFill.classList.add("progress-fill-reversed");
+                    }
+                    progressFill.style.left = `${segment.start}%`;
+                    progressFill.style.width =
+                        `${segment.end - segment.start}%`;
+                    progressTrack.appendChild(progressFill);
+                });
+
+                const percentage = document.createElement("span");
+                percentage.className = "level-progress-percentage";
+                percentage.textContent = entry.procent.label;
+
+                progressRow.append(
+                    playerName,
+                    progressTrack,
+                    percentage
+                );
+                progressGrid.appendChild(progressRow);
+            });
+
+            progressSection.appendChild(progressGrid);
+            card.appendChild(progressSection);
+        }
+
         container.appendChild(card);
 
     });
@@ -498,6 +558,109 @@ async function loadPlayers() {
     }
 }
 
+async function loadProgress() {
+    try {
+        const response = await fetch(PROGRESS_URL, {
+            cache: "no-cache"
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        if (!Array.isArray(data)) {
+            throw new Error("progress.json musi zawierać tablicę");
+        }
+
+        progressEntries = data.flatMap((entry, index) => {
+            const procent = parseProgressValue(entry?.procent);
+            const isValid =
+                entry &&
+                typeof entry["level-name"] === "string" &&
+                entry["level-name"].trim() &&
+                entry["level-id"] !== undefined &&
+                entry["level-id"] !== null &&
+                String(entry["level-id"]).trim() &&
+                typeof entry.player === "string" &&
+                entry.player.trim() &&
+                procent;
+
+            if (!isValid) {
+                console.warn(
+                    `Pomijam nieprawidłowy wpis progress.json (indeks ${index}).`
+                );
+                return [];
+            }
+
+            return [{
+                "level-name": entry["level-name"].trim(),
+                "level-id": String(entry["level-id"]).trim(),
+                player: entry.player.trim(),
+                procent
+            }];
+        });
+    } catch (error) {
+        console.error("Błąd progress.json:", error);
+        progressEntries = [];
+    }
+}
+
+function playerHasCompletedLevel(player, level) {
+    const levelId = String(level.id);
+    const levelName = String(level.name).trim().toLowerCase();
+
+    return player.Demons.some(demon => {
+        const completedDemon = String(demon).trim();
+        return completedDemon === levelId ||
+            completedDemon.toLowerCase() === levelName;
+    });
+}
+
+function getProgressForLevel(level) {
+    const entriesByPlayer = new Map();
+
+    progressEntries.forEach(entry => {
+        if (entry["level-id"] !== String(level.id)) {
+            return;
+        }
+
+        const player = players.find(existingPlayer =>
+            existingPlayer.Player.toLowerCase() === entry.player.toLowerCase()
+        );
+
+        if (player && playerHasCompletedLevel(player, level)) {
+            return;
+        }
+
+        const playerKey = entry.player.toLowerCase();
+        if (!entriesByPlayer.has(playerKey)) {
+            entriesByPlayer.set(playerKey, {
+                player: entry.player,
+                progressValues: []
+            });
+        }
+
+        entriesByPlayer.get(playerKey).progressValues.push(entry.procent);
+    });
+
+    return [...entriesByPlayer.values()].map(entry => ({
+        player: entry.player,
+        procent: combineProgressValues(entry.progressValues)
+    }));
+}
+
+function getProgressForPlayer(playerName) {
+    return levels.flatMap(level => {
+        const progress = getProgressForLevel(level).find(entry =>
+            entry.player.toLowerCase() === playerName.toLowerCase()
+        );
+
+        return progress ? [{ entry: progress, level }] : [];
+    });
+}
+
 
 // =====================================================
 // POKAŻ GRACZA
@@ -657,6 +820,41 @@ function showPlayer(player) {
 
         searchResults.appendChild(result);
 
+    });
+
+    getProgressForPlayer(player.Player).forEach(({ entry, level }) => {
+        const result = document.createElement("div");
+        result.className = "search-result";
+
+        const main = document.createElement("div");
+        main.className = "search-result-main";
+
+        const type = document.createElement("span");
+        type.className = "search-result-type";
+        type.textContent = "PROGRES";
+
+        const levelName = document.createElement("span");
+        levelName.textContent = level.name;
+        main.append(type, levelName);
+
+        const percentage = document.createElement("span");
+        percentage.className = "search-result-points";
+        percentage.textContent = entry.procent.label;
+
+        result.append(main, percentage);
+        result.addEventListener("click", () => {
+            const card = findDemonById(level.id);
+
+            if (card) {
+                card.scrollIntoView({
+                    behavior: "smooth",
+                    block: "center"
+                });
+                searchResults.style.display = "none";
+            }
+        });
+
+        searchResults.appendChild(result);
     });
 
 
@@ -1010,9 +1208,11 @@ document.addEventListener(
     "DOMContentLoaded",
     async () => {
 
-        await loadLevels();
-
         await loadPlayers();
+
+        await loadProgress();
+
+        await loadLevels();
 
         setupRecentlyButton();
 
