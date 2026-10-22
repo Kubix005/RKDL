@@ -17,10 +17,12 @@
   },
   {
     "Player": "Kingryan0",
+        "tag": "recent",
+    "recent": "Sakupen Hell",
     "Demons": [
       "Molten Core",
-      "Cat Planet",
-      "Diligence"
+      "Infinite Inversion",
+      "Sakupen Hell"
     ]
   },
   {
@@ -143,8 +145,6 @@
   {
     "Player":"Kicek1146",
 
-    "tag": "recent",
-    "recent": "Renevant",
     "Demons":[
       "Renevant",
       "Yatagarasu",
