@@ -10,7 +10,7 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>RKDL - Leaderboard</title>
+    <title>RKDL - Ranking graczy</title>
 
     <link rel="stylesheet" href="style.css">
 
@@ -52,17 +52,17 @@
     <main class="leaderboard-page">
 
         <div class="leaderboard-title">
-            PLAYER LEADERBOARD
+            RANKING GRACZY
         </div>
 
         <div class="leaderboard-subtitle">
-            Ranking based on completed demons
+            Ranking na podstawie ukończonych demonów
         </div>
 
         <div id="leaderboard-list">
 
             <div class="leaderboard-loading">
-                Loading players...
+                Wczytywanie graczy...
             </div>
 
         </div>
@@ -94,6 +94,26 @@ function escapeHTML(text) {
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#039;");
 
+}
+
+function formatDemonCount(count) {
+    const lastTwoDigits = count % 100;
+    const lastDigit = count % 10;
+
+    if (count === 1) {
+        return "1 demon";
+    }
+
+    if (
+        lastTwoDigits < 12 ||
+        lastTwoDigits > 14
+    ) {
+        if (lastDigit >= 2 && lastDigit <= 4) {
+            return `${count} demony`;
+        }
+    }
+
+    return `${count} demonów`;
 }
 
 
@@ -179,7 +199,7 @@ async function loadLeaderboard() {
 
         if (recentLevel && recentlyButton) {
             recentlyButton.style.backgroundImage = `linear-gradient(rgba(0, 35, 0, 0.42), rgba(0, 20, 0, 0.78)), url("${THUMBNAIL_URL}/${recentLevel.id}.webp")`;
-            recentlyButton.title = `${recentPlayer.Player} recently beat ${recentLevel.name}`;
+            recentlyButton.title = `${recentPlayer.Player} ostatnio ukończył(a): ${recentLevel.name}`;
         }
 
 
@@ -188,11 +208,10 @@ async function loadLeaderboard() {
         // =================================================
 
         const demonMap = {};
+        const levelMap = {};
 
 
         levels
-            .slice(0,150
-            )
             .forEach((level, index) => {
 
                 const rank =
@@ -210,8 +229,15 @@ async function loadLeaderboard() {
                         .toLowerCase();
 
 
-                demonMap[name] =
-                    rank;
+                if (index < 150) {
+                    demonMap[name] =
+                        rank;
+                }
+
+                levelMap[name] = {
+                    level,
+                    rank
+                };
 
             });
 
@@ -371,7 +397,21 @@ async function loadLeaderboard() {
                         top25,
 
                     top50:
-                        top50
+                        top50,
+
+                    demons:
+                        playerDemons
+                            .filter(demonName => demonName)
+                            .map(demonName => {
+                                const name = String(demonName).trim();
+                                const demon = levelMap[name.toLowerCase()];
+
+                                return {
+                                    name,
+                                    rank: demon?.rank,
+                                    id: demon?.level.id
+                                };
+                            })
 
                 };
 
@@ -440,72 +480,119 @@ async function loadLeaderboard() {
         leaderboard.forEach(
             (player, index) => {
 
-                const row =
-                    document.createElement(
-                        "div"
-                    );
+                const entry =
+                    document.createElement("div");
 
+                entry.className =
+                    "leaderboard-entry";
+
+                const row =
+                    document.createElement("button");
+
+                const detailsId =
+                    `player-demons-${index}`;
+
+                row.type =
+                    "button";
 
                 row.className =
                     "leaderboard-row";
 
+                row.setAttribute("aria-expanded", "false");
+
+                row.setAttribute("aria-controls", detailsId);
 
                 row.innerHTML = `
 
-                    <div class="leaderboard-position">
+                    <span class="leaderboard-position">
                         #${index + 1}
-                    </div>
+                    </span>
 
 
-                    <div class="leaderboard-player">
+                    <span class="leaderboard-player">
 
-                        <div class="player-name">
+                        <span class="leaderboard-player-name">
                             ${escapeHTML(player.name)}
-                        </div>
-                            BEST TOP ${player.bestRank}
-                        </div>
-
-                    </div>
-
-
-                    <div class="leaderboard-stats">
-
-                        <div>
-                            TOP 10:
-                            ${player.top10}
-                        </div>
-
-                        <div>
-                            TOP 25:
-                            ${player.top25}
-                        </div>
-
-                        <div>
-                            TOP 50:
-                            ${player.top50}
-                        </div>
-
-                    </div>
-
-
-                    <div class="leaderboard-points">
-
-                        <strong>
-                            ${player.points}
-                        </strong>
-
-                        <span>
-                            RK
                         </span>
 
-                    </div>
+                        <span class="leaderboard-player-stats">
+                            ${formatDemonCount(player.completed)} · Najlepsza pozycja: ${player.bestRank}
+                        </span>
+                    </span>
+
+
+                    <span class="leaderboard-tops">
+
+                        <span>
+                            TOP 10:
+                            ${player.top10}
+                        </span>
+
+                        <span>
+                            TOP 25:
+                            ${player.top25}
+                        </span>
+
+                        <span>
+                            TOP 50:
+                            ${player.top50}
+                        </span>
+
+                    </span>
+
+
+                    <span class="leaderboard-points">
+                        ${player.points} <small>RK</small>
+                    </span>
 
                 `;
 
+                const details =
+                    document.createElement("div");
 
-                container.appendChild(
-                    row
-                );
+                details.id =
+                    detailsId;
+
+                details.className =
+                    "leaderboard-demons";
+
+                details.hidden =
+                    true;
+
+                details.innerHTML = player.demons.length
+                    ? `
+                        <div class="leaderboard-demons-title">
+                            Demony gracza ${escapeHTML(player.name)}
+                        </div>
+                        <div class="leaderboard-demons-list">
+                            ${player.demons.map(demon => `
+                                <div class="leaderboard-demon">
+                                    ${demon.id
+                                        ? `<img src="${THUMBNAIL_URL}/${encodeURIComponent(String(demon.id))}.webp" alt="" loading="lazy">`
+                                        : ""}
+                                    <span class="leaderboard-demon-name">${escapeHTML(demon.name)}</span>
+                                    <span class="leaderboard-demon-rank">${demon.rank ? `#${demon.rank}` : "Poza rankingiem"}</span>
+                                </div>
+                            `).join("")}
+                        </div>
+                    `
+                    : '<div class="leaderboard-demons-empty">Brak zapisanych demonów.</div>';
+
+                row.addEventListener("click", () => {
+                    const isExpanded =
+                        row.getAttribute("aria-expanded") === "true";
+
+                    row.setAttribute(
+                        "aria-expanded",
+                        String(!isExpanded)
+                    );
+
+                    details.hidden =
+                        isExpanded;
+                });
+
+                entry.append(row, details);
+                container.appendChild(entry);
 
             }
         );
@@ -530,7 +617,7 @@ async function loadLeaderboard() {
 
             <div class="leaderboard-loading">
 
-                Błąd podczas ładowania leaderboardu.
+                Błąd podczas ładowania rankingu.
 
                 <br><br>
 

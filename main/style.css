@@ -1123,7 +1123,9 @@ body::before {
 
     padding: 18px 22px;
 
-    margin-bottom: 8px;
+    width: 100%;
+
+    margin-bottom: 0;
 
     background: #111;
 
@@ -1131,7 +1133,21 @@ body::before {
 
     border-radius: 8px;
 
+    color: inherit;
+
+    font: inherit;
+
+    text-align: left;
+
+    cursor: pointer;
+
     transition: 0.2s;
+
+}
+
+.leaderboard-entry {
+
+    margin-bottom: 8px;
 
 }
 
@@ -1141,6 +1157,106 @@ body::before {
     background: #181818;
 
     transform: translateX(3px);
+
+}
+
+.leaderboard-row:focus-visible {
+
+    outline: 2px solid #00c800;
+
+    outline-offset: 2px;
+
+}
+
+.leaderboard-demons {
+
+    padding: 16px 20px 20px;
+
+    background: rgba(0, 0, 0, 0.55);
+
+    border: 1px solid #292929;
+
+    border-top: 0;
+
+    border-radius: 0 0 8px 8px;
+
+}
+
+.leaderboard-demons-title {
+
+    margin-bottom: 12px;
+
+    font-weight: bold;
+
+    color: #00d000;
+
+}
+
+.leaderboard-demons-list {
+
+    display: grid;
+
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+
+    gap: 10px;
+
+}
+
+.leaderboard-demon {
+
+    display: flex;
+
+    min-width: 0;
+
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 8px;
+
+    background: rgba(255, 255, 255, 0.05);
+
+    border-radius: 6px;
+
+}
+
+.leaderboard-demon img {
+
+    width: 56px;
+
+    height: 36px;
+
+    flex: 0 0 auto;
+
+    object-fit: cover;
+
+    border-radius: 4px;
+
+}
+
+.leaderboard-demon-name {
+
+    min-width: 0;
+
+    flex: 1;
+
+    overflow-wrap: anywhere;
+
+}
+
+.leaderboard-demon-rank {
+
+    flex: 0 0 auto;
+
+    color: rgba(255, 255, 255, 0.65);
+
+    font-size: 12px;
+
+}
+
+.leaderboard-demons-empty {
+
+    color: rgba(255, 255, 255, 0.65);
 
 }
 
@@ -1463,6 +1579,10 @@ body::before {
             1fr
             90px;
 
+        gap: 12px;
+
+        padding: 14px;
+
     }
 
 
@@ -1476,6 +1596,18 @@ body::before {
     .leaderboard-points {
 
         font-size: 18px;
+
+    }
+
+    .leaderboard-demons {
+
+        padding: 14px;
+
+    }
+
+    .leaderboard-demons-list {
+
+        grid-template-columns: 1fr;
 
     }
 
