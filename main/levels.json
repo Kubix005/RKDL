@@ -37,7 +37,8 @@
     },
     {
         "name": "Calamity",
-        "id": "64766514"
+        "id": "64766514",
+        "legacy":"true"
     },
     {
         "name": "Wasureta",
