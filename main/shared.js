@@ -32,7 +32,7 @@ function parseProgressValue(value) {
             start: 0,
             end: value,
             reverseGradient: false,
-            label: `${value}%`
+            label: `${value}%` 
         };
     }
 
