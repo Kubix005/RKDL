@@ -148,24 +148,22 @@ body::before {
 }
 
 .header-home {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 28px;
-    color: black;
-    text-decoration: none;
+    display: inline-block;
+    color: #000;
+    text-decoration: none !important;
     text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.8);
     transition: color 0.25s ease, transform 0.25s ease, text-shadow 0.25s ease;
 }
 
 .header-home:link,
-.header-home:visited {
-    color: black;
-    text-decoration: none;
+.header-home:visited,
+.header-home:active {
+    color: #000;
+    text-decoration: none !important;
 }
 
 .header-home:hover {
-    color: white;
+    color: #fff;
     transform: translateY(-3px);
     text-shadow: 0 0 10px white, 4px 4px 8px black;
 }
@@ -616,13 +614,7 @@ body::before {
 
     .header-home {
 
-        flex-wrap: wrap;
-
-        gap: 8px 15px;
-
-        padding: 8px;
-
-        font-size: 0.9em;
+        font-size: clamp(15px, 4.2vw, 20px);
 
     }
 
