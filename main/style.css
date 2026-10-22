@@ -1064,7 +1064,7 @@ body::before {
 
 .action-links {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(5, minmax(0, 1fr));
     gap: 14px;
     width: min(90%, 1100px);
     margin: 20px auto;
@@ -1440,6 +1440,116 @@ body::before {
 .compare-message small {
     display: inline-block;
     margin-top: 8px;
+}
+
+.prediction-page {
+    width: min(760px, 90%);
+    margin: 40px auto 80px;
+}
+
+.prediction-title {
+    margin-bottom: 12px;
+    text-align: center;
+    font-size: 32px;
+}
+
+.prediction-description {
+    margin-bottom: 24px;
+    color: rgba(255, 255, 255, 0.75);
+    line-height: 1.6;
+    text-align: center;
+}
+
+.prediction-form {
+    display: grid;
+    gap: 12px;
+    padding: 22px;
+    background: linear-gradient(145deg, rgba(0, 50, 0, 0.72), rgba(0, 0, 0, 0.82));
+    border: 1px solid rgba(0, 255, 50, 0.32);
+    border-radius: 14px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+}
+
+.prediction-form label {
+    font-weight: bold;
+}
+
+.prediction-form input {
+    width: 100%;
+    min-height: 48px;
+    padding: 10px 12px;
+    color: white;
+    background: linear-gradient(145deg, #111, #071107);
+    border: 1px solid rgba(0, 220, 0, 0.55);
+    border-radius: 10px;
+    font: inherit;
+}
+
+.prediction-form input:focus-visible {
+    outline: 2px solid #00c800;
+    outline-offset: 2px;
+}
+
+.prediction-form small {
+    color: rgba(255, 255, 255, 0.65);
+    line-height: 1.5;
+}
+
+.prediction-form .leaderboard-button {
+    width: 100%;
+    margin: 6px 0 0;
+    cursor: pointer;
+    font: inherit;
+    font-weight: bold;
+}
+
+.prediction-form .leaderboard-button:disabled {
+    cursor: wait;
+    opacity: 0.65;
+}
+
+.prediction-result {
+    display: grid;
+    gap: 12px;
+    margin-top: 22px;
+    padding: 22px;
+    background: linear-gradient(145deg, rgba(0, 50, 0, 0.72), rgba(0, 0, 0, 0.82));
+    border: 1px solid rgba(0, 255, 50, 0.32);
+    border-radius: 14px;
+    text-align: center;
+}
+
+.prediction-result[hidden] {
+    display: none;
+}
+
+.prediction-result h2 {
+    color: #8dff8d;
+    font-size: 22px;
+}
+
+.prediction-score {
+    color: #00e000;
+    font-size: clamp(28px, 5vw, 42px);
+    font-weight: bold;
+}
+
+.prediction-position {
+    font-size: 19px;
+    font-weight: bold;
+}
+
+.prediction-neighbors {
+    color: rgba(255, 255, 255, 0.75);
+    line-height: 1.6;
+}
+
+.prediction-error {
+    color: #ffb3b3;
+}
+
+.prediction-result a {
+    color: #8dff8d;
 }
 
 .catch-up-plan {
