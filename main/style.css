@@ -1128,6 +1128,7 @@ body::before {
 }
 
 .action-links .leaderboard-button {
+    min-width: 0;
     width: 100%;
     height: 56px;
     min-height: 56px;
