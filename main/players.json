@@ -119,6 +119,14 @@
 
   },
   {
+    "Player": "Antarest",
+    "Demons":[
+      "Stalemate Redux",
+      "Quantum Processing",
+      "Athanatos"
+    ]
+  },
+  {
     "Player": "Patelnia",
     "Demons":[
       "Jesse Pinkman",
