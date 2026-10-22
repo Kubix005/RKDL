@@ -8,16 +8,18 @@
 </head>
 <body>
     <header id="hejder">
-        <a href="index.html" class="back-button">← RKDL</a>
-        <p id="R1">Rodzinka</p>
-        <p id="R2">Kicka</p>
-        <p id="R3">Demon</p>
-        <p id="R4">List</p>
+        <a href="index.html" class="header-home" aria-label="RKDL — strona główna">
+            <span>Rodzinka</span>
+            <span>Kicka</span>
+            <span>Demon</span>
+            <span>List</span>
+        </a>
     </header>
 
     <nav class="page-links" aria-label="Related pages">
-        <a href="leaderboard.html" class="leaderboard-button">🏆 LEADERBOARD</a>
-        <a href="winners.html" class="leaderboard-button">🏆 ZWYCIĘZCY LEVELA</a>
+        <a href="leaderboard.html" class="leaderboard-button">LEADERBOARD</a>
+        <a href="winners.html" class="leaderboard-button">ZWYCIĘZCY LEVELA</a>
+        <a href="compare.html" class="leaderboard-button">PORÓWNAJ GRACZY</a>
     </nav>
 
     <main class="recently-page">
@@ -58,7 +60,14 @@
                 }
 
                 const players = await playersResponse.json();
-                const levels = await levelsResponse.json();
+                const allLevels = await levelsResponse.json();
+                const legacyNames = new Set(
+                    allLevels
+                        .filter(isLegacyLevel)
+                        .map(level => String(level.name).trim().toLowerCase())
+                );
+                const levels = allLevels
+                    .filter(level => !isLegacyLevel(level));
                 const levelsByName = new Map(
                     levels.map(level => [String(level.name).trim().toLowerCase(), level])
                 );
@@ -68,7 +77,10 @@
                 });
 
                 const entries = recentPlayers
-                    .filter(player => player.recent)
+                    .filter(player =>
+                        player.recent &&
+                        !legacyNames.has(String(player.recent).trim().toLowerCase())
+                    )
                     .map(player => {
                         const demonName = String(player.recent).trim();
                         const level = levelsByName.get(demonName.toLowerCase());

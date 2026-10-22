@@ -8,6 +8,7 @@ const THUMBNAIL_URL =
 let levels = [];
 let players = [];
 let aredlRanks = {};
+let legacyLevelNames = new Set();
 
 
 // =====================================================
@@ -45,7 +46,14 @@ async function loadLevels() {
         }
 
         // Maksymalnie TOP 150
-        levels = data.slice(0, 150);
+        legacyLevelNames = new Set(
+            data
+                .filter(isLegacyLevel)
+                .map(level => String(level.name).trim().toLowerCase())
+        );
+        levels = data
+            .filter(level => !isLegacyLevel(level))
+            .slice(0, 150);
 
         await loadAredlRanks();
 
@@ -528,7 +536,9 @@ function showPlayer(player) {
         </div>
 
         <span class="search-result-points">
-    ${player.Demons.reduce((total, demon) => {
+    ${player.Demons
+        .filter(demon => !legacyLevelNames.has(String(demon).trim().toLowerCase()))
+        .reduce((total, demon) => {
         const card = findDemonById(demon) || findDemonByName(demon);
         const rank = getDemonRank(card);
         return total + (rank ? getPoints(rank) : 0);
@@ -543,7 +553,9 @@ function showPlayer(player) {
     // DEMONY GRACZA
     // =============================================
 
-    player.Demons.forEach(demon => {
+    player.Demons
+        .filter(demon => !legacyLevelNames.has(String(demon).trim().toLowerCase()))
+        .forEach(demon => {
 
         let card = null;
 

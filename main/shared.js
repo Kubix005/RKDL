@@ -6,3 +6,8 @@ function getPoints(rank) {
 
     return Math.round(maxPoints * Math.pow(multiplier, rank - 1));
 }
+
+function isLegacyLevel(level) {
+    return level?.legacy === true ||
+        String(level?.legacy ?? "").trim().toLowerCase() === "true";
+}

@@ -24,23 +24,24 @@
 
     <header id="hejder">
 
-        <a href="index.html" class="back-button">
-            ← RKDL
+        <a href="index.html" class="header-home" aria-label="RKDL — strona główna">
+            <span>Rodzinka</span>
+            <span>Kicka</span>
+            <span>Demon</span>
+            <span>List</span>
         </a>
-
-        <p id="R1">Rodzinka</p>
-        <p id="R2">Kicka</p>
-        <p id="R3">Demon</p>
-        <p id="R4">List</p>
 
     </header>
 
     <nav class="page-links" aria-label="Related pages">
         <a href="recently.html" class="leaderboard-button recently-button">
-            🕒 OSTATNIO WBITE!
+            OSTATNIO WBITE!
         </a>
         <a href="winners.html" class="leaderboard-button">
-            🏆 ZWYCIĘZCY LEVELA
+            ZWYCIĘZCY LEVELA
+        </a>
+        <a href="compare.html" class="leaderboard-button">
+            PORÓWNAJ GRACZY
         </a>
     </nav>
 
@@ -191,7 +192,14 @@ async function loadLeaderboard() {
             const tag = Array.isArray(player.tag) ? player.tag : [player.tag];
             return tag.some(value => String(value).toLowerCase() === "recent");
         });
-        const recentLevel = recentPlayer?.recent && levels.find(level =>
+        const activeLevels = levels
+            .filter(level => !isLegacyLevel(level));
+        const legacyNames = new Set(
+            levels
+                .filter(isLegacyLevel)
+                .map(level => String(level.name).trim().toLowerCase())
+        );
+        const recentLevel = recentPlayer?.recent && activeLevels.find(level =>
             String(level.name).trim().toLowerCase() ===
             String(recentPlayer.recent).trim().toLowerCase()
         );
@@ -211,7 +219,7 @@ async function loadLeaderboard() {
         const levelMap = {};
 
 
-        levels
+        activeLevels
             .forEach((level, index) => {
 
                 const rank =
@@ -275,6 +283,10 @@ async function loadLeaderboard() {
                 const playerDemons =
                     Array.isArray(player.Demons)
                         ? player.Demons
+                            .filter(demonName => demonName)
+                            .filter(demonName =>
+                                !legacyNames.has(String(demonName).trim().toLowerCase())
+                            )
                         : [];
 
 
@@ -401,7 +413,6 @@ async function loadLeaderboard() {
 
                     demons:
                         playerDemons
-                            .filter(demonName => demonName)
                             .map(demonName => {
                                 const name = String(demonName).trim();
                                 const demon = levelMap[name.toLowerCase()];

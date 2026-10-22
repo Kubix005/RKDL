@@ -12,6 +12,10 @@
         "id": "71912451"
     },
     {
+        "name": "Shimmer",
+        "id": "94156085"
+    },
+    {
         "name": "Cobwebs",
         "id": "82172844"
     },
@@ -149,7 +153,8 @@
     },
     {
         "name": "Diligence",
-        "id": "62419473"
+        "id": "62419473",
+        "legacy":"true"
     },
     {
         "name": "Crowd Control",
@@ -157,7 +162,8 @@
     },
     {
         "name": "Allegiance",
-        "id": "20761188"
+        "id": "20761188",
+        "legacy":"true"
     },
     {
         "name": "Dreamer",

@@ -8,16 +8,18 @@
 </head>
 <body>
     <header id="hejder">
-        <a href="index.html" class="back-button">← RKDL</a>
-        <p id="R1">Rodzinka</p>
-        <p id="R2">Kicka</p>
-        <p id="R3">Demon</p>
-        <p id="R4">List</p>
+        <a href="index.html" class="header-home" aria-label="RKDL — strona główna">
+            <span>Rodzinka</span>
+            <span>Kicka</span>
+            <span>Demon</span>
+            <span>List</span>
+        </a>
     </header>
 
     <nav class="page-links" aria-label="Related pages">
-        <a href="leaderboard.html" class="leaderboard-button">🏆 LEADERBOARD</a>
-        <a href="recently.html" class="leaderboard-button recently-button">🕒 OSTATNIO WBITE</a>
+        <a href="leaderboard.html" class="leaderboard-button">LEADERBOARD</a>
+        <a href="recently.html" class="leaderboard-button recently-button">OSTATNIO WBITE</a>
+        <a href="compare.html" class="leaderboard-button">PORÓWNAJ GRACZY</a>
     </nav>
 
     <main class="winners-page">
@@ -59,15 +61,18 @@
                     throw new Error("Nie udało się wczytać listy leveli lub graczy.");
                 }
 
-                const [levels, players] = await Promise.all([
+                const [levelsData, players] = await Promise.all([
                     levelsResponse.json(),
                     playersResponse.json()
                 ]);
 
-                if (!Array.isArray(levels) || !Array.isArray(players)) {
+                if (!Array.isArray(levelsData) || !Array.isArray(players)) {
                     throw new Error("Pliki levels.json i players.json muszą zawierać tablice.");
                 }
 
+                const levels = levelsData
+                    .filter(level => !isLegacyLevel(level))
+                    .slice(0, 150);
                 const victorsByLevel = new Map(
                     levels.map(level => [normalizeName(level.name), new Set()])
                 );
