@@ -179,9 +179,13 @@
             return bestPlans;
         }
 
-        function getAlternativePlans(player, demonPool) {
+        function getAlternativePlans(player, comparedPlayer, demonPool) {
             const completedDemons = new Set(
-                player.demons.map(name => String(name).trim().toLowerCase())
+                [player, comparedPlayer].flatMap(completedPlayer =>
+                    completedPlayer.demons.map(name =>
+                        String(name).trim().toLowerCase()
+                    )
+                )
             );
             const availableDemons = demonPool.filter(
                 demon => !completedDemons.has(demon.name.toLowerCase())
@@ -246,7 +250,11 @@
                 const catchUpPlans =
                     getCatchUpPlans(trailingPlayer, difference, demonPool);
                 const alternativePlans =
-                    getAlternativePlans(trailingPlayer, demonPool);
+                    getAlternativePlans(
+                        trailingPlayer,
+                        trailingPlayer === playerA ? playerB : playerA,
+                        demonPool
+                    );
                 const displayedPlans = showAlternativePlans
                     ? [...alternativePlans.map(plan => [plan.count, plan])]
                     : [...catchUpPlans.entries()];
