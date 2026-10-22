@@ -110,6 +110,14 @@
     ]
   },
   {
+    "Player":"Chmureq",
+    "Demons":[
+      "Voltage",
+      "Atomic cannon",
+      "Sonic Wave"
+    ]
+  },
+  {
     "Player": "Zank",
     "Demons":[
       "Shimmer",
