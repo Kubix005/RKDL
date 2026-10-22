@@ -253,7 +253,7 @@
                 const planCards = displayedPlans.map(([count, plan]) => `
                     <article class="catch-up-option">
                         <h3>${count} ${count === 1 ? "demon" : "demony"}</h3>
-                        <strong class="catch-up-total">+${(showAlternativePlans ? plan.totalPoints : plan.netPoints).toLocaleString("pl-PL")} RK${showAlternativePlans ? "" : " netto"}</strong>
+                        <strong class="catch-up-total">+${(showAlternativePlans ? plan.totalPoints : plan.netPoints).toLocaleString("pl-PL")} RK${showAlternativePlans ? "" : ""}</strong>
                         <ol class="catch-up-list">
                             ${plan.demons.map(demon => `
                                 <li>
